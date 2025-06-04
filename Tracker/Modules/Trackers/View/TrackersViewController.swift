@@ -45,6 +45,9 @@ final class TrackersViewController: UIViewController {
         return stack
     }()
 
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUi()
