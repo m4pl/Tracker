@@ -22,6 +22,11 @@
 		B53B40B72DF0968700341FEA /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40B62DF0968700341FEA /* WeekDay.swift */; };
 		B53B40B92DF0969200341FEA /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40B82DF0969200341FEA /* TrackerCategory.swift */; };
 		B53B40BB2DF0969E00341FEA /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40BA2DF0969E00341FEA /* TrackerRecord.swift */; };
+		B53B40BF2DF0A01A00341FEA /* TrackerCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40BE2DF0A01A00341FEA /* TrackerCellView.swift */; };
+		B53B40C22DF0A25900341FEA /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40C12DF0A25900341FEA /* TrackersViewModel.swift */; };
+		B53B40C42DF0AAD300341FEA /* CategoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40C32DF0AAD300341FEA /* CategoryHeaderView.swift */; };
+		B53B40C62DF0BE9700341FEA /* BottomAlignedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40C52DF0BE9700341FEA /* BottomAlignedLabel.swift */; };
+		B53B40C92DF0CF2500341FEA /* Int+DayWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B40C82DF0CF2500341FEA /* Int+DayWord.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +66,11 @@
 		B53B40B62DF0968700341FEA /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
 		B53B40B82DF0969200341FEA /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		B53B40BA2DF0969E00341FEA /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
+		B53B40BE2DF0A01A00341FEA /* TrackerCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCellView.swift; sourceTree = "<group>"; };
+		B53B40C12DF0A25900341FEA /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
+		B53B40C32DF0AAD300341FEA /* CategoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHeaderView.swift; sourceTree = "<group>"; };
+		B53B40C52DF0BE9700341FEA /* BottomAlignedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomAlignedLabel.swift; sourceTree = "<group>"; };
+		B53B40C82DF0CF2500341FEA /* Int+DayWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DayWord.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +121,8 @@
 		B53B406C2DF068B800341FEA /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				B53B40C72DF0CF1800341FEA /* Extensions */,
+				B53B40BC2DF09FF200341FEA /* UI */,
 				B53B40AE2DF0959D00341FEA /* Modules */,
 				B53B40AD2DF0954800341FEA /* Models */,
 				B53B40AC2DF0952400341FEA /* Resources */,
@@ -204,6 +216,7 @@
 		B53B40B12DF095D900341FEA /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
+				B53B40C02DF0A22A00341FEA /* ViewModel */,
 				B53B40B22DF095E200341FEA /* View */,
 			);
 			path = Trackers;
@@ -223,6 +236,40 @@
 				B53B40A22DF06A9400341FEA /* MainTabBarViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B53B40BC2DF09FF200341FEA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B53B40BD2DF09FFD00341FEA /* Components */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		B53B40BD2DF09FFD00341FEA /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B53B40BE2DF0A01A00341FEA /* TrackerCellView.swift */,
+				B53B40C32DF0AAD300341FEA /* CategoryHeaderView.swift */,
+				B53B40C52DF0BE9700341FEA /* BottomAlignedLabel.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		B53B40C02DF0A22A00341FEA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B53B40C12DF0A25900341FEA /* TrackersViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		B53B40C72DF0CF1800341FEA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B53B40C82DF0CF2500341FEA /* Int+DayWord.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -357,14 +404,19 @@
 			files = (
 				B53B40B92DF0969200341FEA /* TrackerCategory.swift in Sources */,
 				B53B40782DF068B800341FEA /* Tracker.xcdatamodeld in Sources */,
+				B53B40C62DF0BE9700341FEA /* BottomAlignedLabel.swift in Sources */,
 				B53B40A32DF06A9400341FEA /* MainTabBarViewController.swift in Sources */,
 				B53B40B72DF0968700341FEA /* WeekDay.swift in Sources */,
 				B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */,
+				B53B40BF2DF0A01A00341FEA /* TrackerCellView.swift in Sources */,
 				B53B40BB2DF0969E00341FEA /* TrackerRecord.swift in Sources */,
 				B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */,
 				B53B40A62DF06AAE00341FEA /* TrackersViewController.swift in Sources */,
+				B53B40C22DF0A25900341FEA /* TrackersViewModel.swift in Sources */,
+				B53B40C92DF0CF2500341FEA /* Int+DayWord.swift in Sources */,
 				B53B40A92DF06ACA00341FEA /* StatisticsViewController.swift in Sources */,
 				B53B40B52DF0967B00341FEA /* Tracker.swift in Sources */,
+				B53B40C42DF0AAD300341FEA /* CategoryHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

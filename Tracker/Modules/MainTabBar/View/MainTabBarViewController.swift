@@ -10,7 +10,7 @@ import UIKit
 final class MainTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let trackersVC = UINavigationController(
             rootViewController: TrackersViewController()
         )
@@ -28,7 +28,10 @@ final class MainTabBarViewController: UITabBarController {
             image: UIImage(named: "tab_statistics_logo"),
             tag: 1
         )
-        
+
+        view.backgroundColor = .ypColorWhite
+        tabBar.isTranslucent = false
+
         viewControllers = [trackersVC, statisticsVC]
     }
 }
