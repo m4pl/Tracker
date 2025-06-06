@@ -25,7 +25,24 @@ final class TrackersViewModel {
     
     // MARK: - Init
     init() {
-        loadMockData()
+        filterVisibleCategories()
+    }
+    
+    // MARK: - Tracker Operations
+    
+    func addTracker(_ tracker: Tracker, toCategoryTitle title: String) {
+        if let index = allCategories.firstIndex(where: { $0.title == title }) {
+            let category = allCategories[index]
+            let newCategory = TrackerCategory(
+                title: category.title,
+                trackers: category.trackers + [tracker]
+            )
+            allCategories[index] = newCategory
+        } else {
+            let newCategory = TrackerCategory(title: title, trackers: [tracker])
+            allCategories.append(newCategory)
+        }
+        
         filterVisibleCategories()
     }
     
@@ -54,76 +71,16 @@ final class TrackersViewModel {
     // MARK: - Private Helpers
     
     private func filterVisibleCategories() {
-        var calendar = Calendar.current
-        calendar.timeZone = .current
-        
+        let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: selectedDate)
-        let day = WeekDay(rawValue: weekday) ?? .monday
+        let adjustedWeekday = (weekday + 5) % 7 + 1
+        let day = WeekDay(rawValue: adjustedWeekday) ?? .monday
         
         let filtered = allCategories.map { category in
-            let filtered = category.trackers.filter { $0.schedule.contains(day) }
-            return TrackerCategory(title: category.title, trackers: filtered)
+            let filteredTrackers = category.trackers.filter {$0.schedule.contains(day)}
+            return TrackerCategory(title: category.title, trackers: filteredTrackers)
         }.filter { !$0.trackers.isEmpty }
         
         visibleCategories.send(filtered)
-    }
-    
-    private func loadMockData() {
-        let redHeart = Tracker(
-            id: UUID(),
-            name: "Поливать растения",
-            color: .systemGreen,
-            emoji: "❤️",
-            schedule: [WeekDay.thursday,WeekDay.saturday]
-        )
-        let smilingCatWithHeartEyes = Tracker(
-            id: UUID(),
-            name: "Кошка заслонила камеру на созвоне",
-            color: .systemOrange,
-            emoji: "😻",
-            schedule: WeekDay.allCases
-        )
-        let hibiscus = Tracker(
-            id: UUID(),
-            name: "Бабушка прислала открытку в вотсапе",
-            color: .systemRed,
-            emoji: "🌺",
-            schedule: WeekDay.allCases
-        )
-        let girl = Tracker(
-            id: UUID(),
-            name: "Свидания в апреле",
-            color: .systemPurple,
-            emoji: "👧",
-            schedule: [WeekDay.wednesday]
-        )
-        let goodMood = Tracker(
-            id: UUID(),
-            name: "Хорошее настроение",
-            color: .systemPurple,
-            emoji: "🙂",
-            schedule: WeekDay.allCases
-        )
-        let mildAnxiety = Tracker(
-            id: UUID(),
-            name: "Легкая тревожность",
-            color: .systemBlue,
-            emoji: "😪",
-            schedule: WeekDay.allCases
-        )
-        let homeComfort = TrackerCategory(
-            title: "Домашний уют",
-            trackers: [redHeart]
-        )
-        let joyfulLittleThings = TrackerCategory(
-            title: "Радостные мелочи",
-            trackers: [smilingCatWithHeartEyes, hibiscus, girl]
-        )
-        let feelings = TrackerCategory(
-            title: "Самочувствие",
-            trackers: [goodMood, mildAnxiety]
-        )
-        
-        allCategories = [homeComfort, joyfulLittleThings, feelings]
     }
 }

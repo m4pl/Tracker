@@ -67,11 +67,6 @@ final class TrackerCellView: UICollectionViewCell {
         button.layer.cornerRadius = 17
         button.clipsToBounds = true
         button.tintColor = .ypColorWhite
-        button.addTarget(
-            nil,
-            action:#selector(completeButtonTapped),
-            for: .touchUpInside
-        )
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -183,7 +178,13 @@ final class TrackerCellView: UICollectionViewCell {
     
     private func setupCompleteButton() {
         contentView.addSubview(completeButton)
-        
+
+        completeButton.addTarget(
+            self,
+            action:#selector(completeButtonTapped),
+            for: .touchUpInside
+        )
+
         NSLayoutConstraint.activate([
             completeButton.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,

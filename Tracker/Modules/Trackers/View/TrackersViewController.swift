@@ -108,6 +108,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private func setupTitleLabel() {
         view.addSubview(titleLabel)
+
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
@@ -217,6 +218,27 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     }
     
     @objc private func addTracker() {
+        let typeVC = TrackerTypeSelectionViewController()
+        typeVC.title = "Создание трекера"
+        typeVC.onTypeSelected = { [weak self] isHabit in
+            self?.presentTrackerCreation(isHabit: isHabit)
+        }
+        let navController = UINavigationController(rootViewController: typeVC)
+        present(navController, animated: true)
+    }
+
+    private func presentTrackerCreation(isHabit: Bool) {
+        let creationVC = TrackerCreationViewController()
+        creationVC.isHabit = isHabit
+        creationVC.title = isHabit ? "Новая привычка" : "Новое нерегулярное событие"
+        creationVC.onTrackerCreated = { [weak self] tracker in
+            self?.viewModel.addTracker(
+                tracker,
+                toCategoryTitle: "Мои трекеры"
+            )
+        }
+        let navController = UINavigationController(rootViewController: creationVC)
+        present(navController, animated: true)
     }
 }
 
