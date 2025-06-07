@@ -192,6 +192,7 @@ final class TrackerCreationViewController: UIViewController {
     ) {
         button.setTitle(title, for: .normal)
         button.setTitleColor(.ypColorBlack, for: .normal)
+        button.titleLabel?.font = AppTextStyle.ypRegular17.font
         button.contentHorizontalAlignment = .left
         button.heightAnchor.constraint(equalToConstant: 75).isActive = true
         button.addTarget(self, action: action, for: .touchUpInside)
@@ -244,6 +245,7 @@ final class TrackerCreationViewController: UIViewController {
     private func setupCancelButton() {
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.ypColorRed, for: .normal)
+        cancelButton.titleLabel?.font = AppTextStyle.ypMedium16.font
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.ypColorRed.cgColor
         cancelButton.layer.cornerRadius = 16
@@ -257,6 +259,7 @@ final class TrackerCreationViewController: UIViewController {
     private func setupCreateButton() {
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.ypColorWhite, for: .normal)
+        cancelButton.titleLabel?.font = AppTextStyle.ypMedium16.font
         createButton.backgroundColor = .ypColorGray
         createButton.layer.cornerRadius = 16
         createButton.addTarget(
@@ -282,6 +285,7 @@ final class TrackerCreationViewController: UIViewController {
             self?.schedule = selected
         }
         let navController = UINavigationController(rootViewController: scheduleVC)
+        navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
         present(navController, animated: true)
     }
     

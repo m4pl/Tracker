@@ -13,7 +13,7 @@ final class CategoryHeaderView: UICollectionReusableView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        label.font = AppTextStyle.ypBold19.font
         label.textColor = .ypColorBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

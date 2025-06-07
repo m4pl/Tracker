@@ -36,7 +36,7 @@ final class TrackerCellView: UICollectionViewCell {
     
     private let emojiLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = AppTextStyle.ypMedium16.font
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -44,7 +44,7 @@ final class TrackerCellView: UICollectionViewCell {
     
     private let nameLabel: UILabel = {
         let label = BottomAlignedLabel()
-        label.font = .systemFont(ofSize: 12, weight: .medium)
+        label.font = AppTextStyle.ypMedium12.font
         label.textColor = .ypColorConstantWhite
         label.numberOfLines = 2
         let lineHeight = label.font.lineHeight
@@ -56,7 +56,7 @@ final class TrackerCellView: UICollectionViewCell {
     
     private let daysLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .medium)
+        label.font = AppTextStyle.ypMedium12.font
         label.textColor = .ypColorBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

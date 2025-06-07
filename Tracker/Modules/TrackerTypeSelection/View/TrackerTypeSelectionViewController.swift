@@ -16,6 +16,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
         button.setTitle("Привычка", for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
+        button.titleLabel?.font = AppTextStyle.ypMedium16.font
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -26,6 +27,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
         button.setTitle("Нерегулярное событие", for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
+        button.titleLabel?.font = AppTextStyle.ypMedium16.font
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -113,14 +115,14 @@ final class TrackerTypeSelectionViewController: UIViewController {
     }
     
     @objc private func habitSelected() {
-        dismiss(animated: true) { [weak self] in
-            self?.onTypeSelected?(true)
+        dismiss(animated: true) {
+            self.onTypeSelected?(true)
         }
     }
     
     @objc private func eventSelected() {
-        dismiss(animated: true) { [weak self] in
-            self?.onTypeSelected?(false)
+        dismiss(animated: true) {
+            self.onTypeSelected?(false)
         }
     }
 }

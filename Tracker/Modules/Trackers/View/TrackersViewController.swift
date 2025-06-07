@@ -10,15 +10,6 @@ import Combine
 
 final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Трекеры"
-        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        label.textColor = .ypColorBlack
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     private let datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
@@ -41,7 +32,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         label.text = "Что будем отслеживать?"
         label.textAlignment = .center
         label.textColor = .ypColorBlack
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.font = AppTextStyle.ypMedium12.font
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -55,14 +46,28 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         return stack
     }()
     
-    private var collectionView: UICollectionView!
+    private lazy var flowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 9
+        layout.minimumLineSpacing = 0
+        return layout
+    }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        return view
+    }()
     
     private let viewModel = TrackersViewModel()
     private var cancellables = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         viewModel.visibleCategories
             .receive(on: DispatchQueue.main)
             .sink { [weak self] categories in
@@ -70,20 +75,19 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
                 self?.updateEmptyState(categories)
             }
             .store(in: &cancellables)
-
+        
         setupUi()
     }
-
+    
     private func updateEmptyState(_ categories: [TrackerCategory]) {
         let isEmpty = categories.isEmpty
         emptyStack.isHidden = !isEmpty
         collectionView.isHidden = isEmpty
     }
-
+    
     private func setupUi() {
         view.backgroundColor = .ypColorWhite
         setupNavigationBar()
-        setupTitleLabel()
         setupCollectionView()
         setupEmptyPlaceholder()
     }
@@ -104,24 +108,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             customView: datePicker
         )
-    }
-    
-    private func setupTitleLabel() {
-        view.addSubview(titleLabel)
-
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor
-            ),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            titleLabel.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -16
-            )
-        ])
+        navigationItem.title = "Трекеры"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     private func setupEmptyPlaceholder() {
@@ -157,21 +146,13 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
             )
         ])
     }
-
+    
     private func setupCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 9
-        layout.minimumLineSpacing = 0
-
-        let availableWidth = view.bounds.width - 32 - layout.minimumInteritemSpacing
+        let availableWidth = view.bounds.width - 32 - flowLayout.minimumInteritemSpacing
         let cellWidth = floor(availableWidth / 2)
-        layout.itemSize = CGSize(width: cellWidth, height: 148)
+        flowLayout.itemSize = CGSize(width: cellWidth, height: 148)
         
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .clear
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(
@@ -188,8 +169,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 10
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: 8
             ),
             collectionView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
@@ -200,19 +181,19 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
                 constant: -16
             ),
             collectionView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor
             )
         ])
     }
-
+    
     private func tracker(at indexPath: IndexPath) -> Tracker {
         return viewModel.visibleCategories.value[indexPath.section].trackers[indexPath.item]
     }
-
+    
     private func category(at section: Int) -> TrackerCategory {
         return viewModel.visibleCategories.value[section]
     }
-
+    
     @objc private func dateChanged(_ sender: UIDatePicker) {
         viewModel.selectedDate = sender.date
     }
@@ -224,9 +205,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
             self?.presentTrackerCreation(isHabit: isHabit)
         }
         let navController = UINavigationController(rootViewController: typeVC)
+        navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
         present(navController, animated: true)
     }
-
+    
     private func presentTrackerCreation(isHabit: Bool) {
         let creationVC = TrackerCreationViewController()
         creationVC.isHabit = isHabit
@@ -238,12 +220,13 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
             )
         }
         let navController = UINavigationController(rootViewController: creationVC)
+        navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
         present(navController, animated: true)
     }
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
-
+    
     func numberOfSections(
         in collectionView: UICollectionView
     ) -> Int {
@@ -277,7 +260,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.delegate = self
         return cell
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,

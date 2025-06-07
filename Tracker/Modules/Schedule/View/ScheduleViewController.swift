@@ -29,6 +29,7 @@ final class ScheduleViewController: UIViewController {
         button.setTitle("Готово", for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
+        button.titleLabel?.font = AppTextStyle.ypMedium16.font
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
