@@ -12,6 +12,7 @@ enum AppTextStyle {
     case ypMedium12
     case ypMedium16
     case ypBold19
+    case ypBold32
     case ypBold34
     
     var font: UIFont {
@@ -24,6 +25,8 @@ enum AppTextStyle {
             return UIFont(name: "SFProDisplay-Medium", size: 16)!
         case .ypBold19:
             return UIFont(name: "SFProDisplay-Bold", size: 19)!
+        case .ypBold32:
+            return UIFont(name: "SFProDisplay-Bold", size: 32)!
         case .ypBold34:
             return UIFont(name: "SFProDisplay-Bold", size: 34)!
         }
