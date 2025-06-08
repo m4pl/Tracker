@@ -62,8 +62,17 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         return view
     }()
     
-    private let viewModel = TrackersViewModel()
+    private let viewModel: TrackersViewModel
     private var cancellables = Set<AnyCancellable>()
+    
+    init(viewModel: TrackersViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -213,11 +222,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         let creationVC = TrackerCreationViewController()
         creationVC.isHabit = isHabit
         creationVC.title = isHabit ? "Новая привычка" : "Новое нерегулярное событие"
-        creationVC.onTrackerCreated = { [weak self] tracker in
-            self?.viewModel.addTracker(
-                tracker,
-                toCategoryTitle: "Мои трекеры"
-            )
+        creationVC.onTrackerCreated = { [weak self] tracker, category in
+            self?.viewModel.addTracker(tracker, category)
         }
         let navController = UINavigationController(rootViewController: creationVC)
         navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes

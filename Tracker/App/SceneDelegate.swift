@@ -19,8 +19,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let context = CoreDataManager.shared.viewContext
 
+        let trackersViewModel = TrackersViewModel(
+            categoryStore: TrackerCategoryStore(context: context),
+            trackerStore: TrackerStore(context: context),
+            recordStore: TrackerRecordStore(context: context)
+        )
+
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = MainTabBarViewController()
+        window?.rootViewController = MainTabBarViewController(
+            trackersViewModel: trackersViewModel
+        )
         window?.makeKeyAndVisible()
     }
 

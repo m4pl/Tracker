@@ -23,38 +23,52 @@ final class TrackersViewModel {
     // MARK: - Data Storage
     private var allCategories: [TrackerCategory] = []
     
+    // MARK: - Core Data Stores
+    private let categoryStore: TrackerCategoryStore
+    private let trackerStore: TrackerStore
+    private let recordStore: TrackerRecordStore
+    
     // MARK: - Init
-    init() {
-        filterVisibleCategories()
+    init(
+        categoryStore: TrackerCategoryStore,
+        trackerStore: TrackerStore,
+        recordStore: TrackerRecordStore
+    ) {
+        self.categoryStore = categoryStore
+        self.trackerStore = trackerStore
+        self.recordStore = recordStore
+        
+        categoryStore.delegate = self
+        recordStore.delegate = self
+        
+        reloadAll()
     }
     
-    // MARK: - Tracker Operations
+    // MARK: - Public Methods
     
-    func addTracker(_ tracker: Tracker, toCategoryTitle title: String) {
-        if let index = allCategories.firstIndex(where: { $0.title == title }) {
-            let category = allCategories[index]
-            let newCategory = TrackerCategory(
-                title: category.title,
-                trackers: category.trackers + [tracker]
-            )
-            allCategories[index] = newCategory
-        } else {
-            let newCategory = TrackerCategory(title: title, trackers: [tracker])
-            allCategories.append(newCategory)
+    func addTracker(_ tracker: Tracker, _ category: TrackerCategory) {
+        do {
+            try trackerStore.add(tracker)
+            try categoryStore.add(category)
+        } catch {
+            print("Error adding tracker: \(error)")
         }
-        
-        filterVisibleCategories()
     }
     
     func toggleTrackerCompletion(_ trackerId: UUID) {
         let calendar = Calendar.current
+        let selectedDay = selectedDate
         
-        if let index = completedTrackers.firstIndex(where: {
-            $0.trackerId == trackerId && calendar.isDate($0.date, inSameDayAs: selectedDate)
+        if let record = completedTrackers.first(where: {
+            $0.trackerId == trackerId && calendar.isDate($0.date, inSameDayAs: selectedDay)
         }) {
-            completedTrackers.remove(at: index)
+            try? recordStore.delete(record)
         } else {
-            completedTrackers.append(.init(trackerId: trackerId, date: selectedDate))
+            let newRecord = TrackerRecord(
+                trackerId: trackerId,
+                date: selectedDay
+            )
+            try? recordStore.add(newRecord)
         }
     }
     
@@ -68,7 +82,26 @@ final class TrackersViewModel {
         return completedTrackers.filter { $0.trackerId == trackerId }.count
     }
     
-    // MARK: - Private Helpers
+    // MARK: - Private
+    
+    private func reloadAll() {
+        loadCategories()
+        loadRecords()
+    }
+    
+    private func loadCategories() {
+        do {
+            let categories = try categoryStore.getCategories()
+            self.allCategories = categories
+            filterVisibleCategories()
+        } catch {
+            print("Error loading categories: \(error)")
+        }
+    }
+    
+    private func loadRecords() {
+        self.completedTrackers = recordStore.getRecords()
+    }
     
     private func filterVisibleCategories() {
         let calendar = Calendar.current
@@ -77,10 +110,22 @@ final class TrackersViewModel {
         let day = WeekDay(rawValue: adjustedWeekday) ?? .monday
         
         let filtered = allCategories.map { category in
-            let filteredTrackers = category.trackers.filter {$0.schedule.contains(day)}
+            let filteredTrackers = category.trackers.filter { $0.schedule.contains(day) }
             return TrackerCategory(title: category.title, trackers: filteredTrackers)
         }.filter { !$0.trackers.isEmpty }
         
         visibleCategories.send(filtered)
+    }
+}
+
+extension TrackersViewModel: TrackerCategoryStoreDelegate {
+    func trackerCategoryStoreDidChange(_ store: TrackerCategoryStore) {
+        loadCategories()
+    }
+}
+
+extension TrackersViewModel: TrackerRecordStoreDelegate {
+    func trackerRecordStoreDidChange(_ store: TrackerRecordStore) {
+        loadRecords()
     }
 }

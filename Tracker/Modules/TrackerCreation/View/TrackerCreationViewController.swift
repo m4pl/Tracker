@@ -12,9 +12,10 @@ final class TrackerCreationViewController: UIViewController {
     // MARK: - Properties
     
     var isHabit: Bool = false
-    var onTrackerCreated: ((Tracker) -> Void)?
+    var onTrackerCreated: ((Tracker, TrackerCategory) -> Void)?
     
     private var schedule: [WeekDay] = []
+    private var category: TrackerCategory? = nil
     
     private let nameField: UITextField = {
         let field = UITextField()
@@ -132,7 +133,7 @@ final class TrackerCreationViewController: UIViewController {
         scroll.translatesAutoresizingMaskIntoConstraints = false
         return scroll
     }()
-
+    
     private let contentStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -156,7 +157,7 @@ final class TrackerCreationViewController: UIViewController {
         view.addSubview(buttonHorizontalStack)
         
         scrollView.addSubview(contentStackView)
-
+        
         setupNameField()
         setupCategoryScheduleStack()
         setupEmojiCollection()
@@ -177,7 +178,7 @@ final class TrackerCreationViewController: UIViewController {
                 equalTo: buttonHorizontalStack.topAnchor,
                 constant: -16
             ),
-
+            
             contentStackView.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
             ),
@@ -231,7 +232,7 @@ final class TrackerCreationViewController: UIViewController {
         divider.heightAnchor.constraint(equalToConstant: isHabit ? 1 : 0).isActive = true
         divider.leadingAnchor.constraint(equalTo: buttonVerticalStack.leadingAnchor, constant: 16).isActive = true
         divider.trailingAnchor.constraint(equalTo: buttonVerticalStack.trailingAnchor, constant: -16).isActive = true
-
+        
         if isHabit {
             buttonVerticalStack.addArrangedSubview(scheduleButton)
         }
@@ -343,20 +344,20 @@ final class TrackerCreationViewController: UIViewController {
             for: .touchUpInside
         )
     }
-
+    
     private func makePaddedContainer(for view: UIView, topInset: CGFloat) -> UIView {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(view)
         view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
             view.topAnchor.constraint(equalTo: container.topAnchor, constant: topInset),
             view.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             view.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: container.bottomAnchor)
         ])
-
+        
         return container
     }
     
@@ -388,8 +389,12 @@ final class TrackerCreationViewController: UIViewController {
             emoji: EmojiCell.emojis[selectedEmojiIndex?.item ?? 0],
             schedule: isHabit ? schedule : WeekDay.allCases
         )
+        let updatedCategory = TrackerCategory(
+            title: category?.title ?? "С категорией",
+            trackers: category?.trackers ?? [] + [tracker]
+        )
         
-        onTrackerCreated?(tracker)
+        onTrackerCreated?(tracker, updatedCategory)
         dismiss(animated: true)
     }
     
