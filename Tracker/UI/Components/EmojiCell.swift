@@ -11,12 +11,6 @@ final class EmojiCell: UICollectionViewCell {
     
     static let identifier = "EmojiCell"
     
-    static let emojis: [String] = [
-        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🏅", "🎸", "🏝️", "😪"
-    ]
-
     private let label: UILabel = {
         let label = UILabel()
         label.font = AppTextStyle.ypBold32.font

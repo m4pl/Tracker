@@ -210,6 +210,12 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     private func setupNameField() {
+        nameField.addTarget(
+            self,
+            action: #selector(nameChanged),
+            for: .editingChanged
+        )
+        
         nameField.heightAnchor.constraint(equalToConstant: 75).isActive = true
         let padded = makePaddedContainer(for: nameField, topInset: 24)
         contentStackView.addArrangedSubview(padded)
@@ -218,14 +224,15 @@ final class TrackerCreationViewController: UIViewController {
     private func setupCategoryScheduleStack() {
         setupButton(
             categoryButton,
-            title: "Категория",
             action: #selector(categoryTapped)
         )
         setupButton(
             scheduleButton,
-            title: "Расписание",
             action: #selector(scheduleTapped)
         )
+
+        updateCategoryButtonSubtitle()
+        updateScheduleButtonSubtitle()
         
         buttonVerticalStack.addArrangedSubview(categoryButton)
         buttonVerticalStack.addArrangedSubview(divider)
@@ -252,13 +259,10 @@ final class TrackerCreationViewController: UIViewController {
     
     private func setupButton(
         _ button: UIButton,
-        title: String,
         action: Selector
     ) {
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.ypColorBlack, for: .normal)
-        button.titleLabel?.font = AppTextStyle.ypRegular17.font
         button.contentHorizontalAlignment = .left
+        button.titleLabel?.numberOfLines = 2
         button.heightAnchor.constraint(equalToConstant: 75).isActive = true
         button.addTarget(self, action: action, for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -277,7 +281,44 @@ final class TrackerCreationViewController: UIViewController {
             )
         ])
     }
-    
+
+    private func updateCategoryButtonSubtitle() {
+        categoryButton.setAttributedTitle(makeButtonTitle("Категория", nil), for: .normal)
+    }
+
+    private func updateScheduleButtonSubtitle() {
+        let subtitle = schedule.count == WeekDay.allCases.count
+            ? "Каждый день"
+            : schedule.map { $0.shortName }.joined(separator: ", ")
+        scheduleButton.setAttributedTitle(makeButtonTitle("Расписание", subtitle), for: .normal)
+    }
+
+    private func makeButtonTitle(
+        _ title: String,
+        _ subtitle: String?
+    ) -> NSAttributedString {
+        let titleAttributed = NSMutableAttributedString(
+            string: title,
+            attributes: [
+                .font: AppTextStyle.ypRegular17.font,
+                .foregroundColor: UIColor.ypColorBlack
+            ]
+        )
+
+        if let subtitle = subtitle, !subtitle.isEmpty {
+            let subtitleAttributed = NSAttributedString(
+                string: "\n\(subtitle)",
+                attributes: [
+                    .font: AppTextStyle.ypRegular17.font,
+                    .foregroundColor: UIColor.ypColorGray
+                ]
+            )
+            titleAttributed.append(subtitleAttributed)
+        }
+
+        return titleAttributed
+    }
+
     private func setupEmojiCollection() {
         emojiCollectionView.heightAnchor.constraint(equalToConstant: 226).isActive = true
         let padded = makePaddedContainer(for: emojiCollectionView, topInset: 16)
@@ -360,11 +401,26 @@ final class TrackerCreationViewController: UIViewController {
         
         return container
     }
+
+    private func updateCreateButtonState() {
+        let isReady = !(nameField.text?.isEmpty ?? true)
+            && selectedEmojiIndex != nil
+            && selectedColorIndex != nil
+//            && category != nil
+            && (!isHabit || !schedule.isEmpty)
+
+        createButton.isEnabled = isReady
+        createButton.backgroundColor = isReady ? .ypColorBlack : .ypColorGray
+    }
     
     // MARK: - Actions
     
     @objc private func endEditing() {
         view.endEditing(true)
+    }
+    
+    @objc private func nameChanged() {
+        updateCreateButtonState()
     }
     
     @objc private func categoryTapped() {}
@@ -375,6 +431,8 @@ final class TrackerCreationViewController: UIViewController {
         scheduleVC.title = "Расписание"
         scheduleVC.onSave = { [weak self] selected in
             self?.schedule = selected
+            self?.updateScheduleButtonSubtitle()
+            self?.updateCreateButtonState()
         }
         let navController = UINavigationController(rootViewController: scheduleVC)
         navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
@@ -385,9 +443,9 @@ final class TrackerCreationViewController: UIViewController {
         let tracker = Tracker(
             id: UUID(),
             name: nameField.text ?? "",
-            color: ColorCell.colors[selectedColorIndex?.item ?? 0],
-            emoji: EmojiCell.emojis[selectedEmojiIndex?.item ?? 0],
-            schedule: isHabit ? schedule : WeekDay.allCases
+            color: ColorData.all[selectedColorIndex?.item ?? 0].toHex(),
+            emoji: EmojiData.all[selectedEmojiIndex?.item ?? 0],
+            schedule: isHabit ? schedule : []
         )
         let updatedCategory = TrackerCategory(
             title: category?.title ?? "С категорией",
@@ -408,10 +466,13 @@ extension TrackerCreationViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        if collectionView == emojiCollectionView {
-            return EmojiCell.emojis.count
-        } else {
-            return ColorCell.colors.count
+        switch collectionView {
+        case emojiCollectionView:
+            return EmojiData.all.count
+        case colorCollectionView:
+            return ColorData.all.count
+        default:
+            return 0
         }
     }
     
@@ -424,14 +485,14 @@ extension TrackerCreationViewController: UICollectionViewDataSource {
                 withReuseIdentifier: EmojiCell.identifier,
                 for: indexPath
             ) as! EmojiCell
-            cell.configure(with: EmojiCell.emojis[indexPath.item])
+            cell.configure(with: EmojiData.all[indexPath.item])
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ColorCell.identifier,
                 for: indexPath
             ) as! ColorCell
-            cell.configure(with: ColorCell.colors[indexPath.item])
+            cell.configure(with: ColorData.all[indexPath.item])
             return cell
         }
     }
@@ -476,6 +537,7 @@ extension TrackerCreationViewController: UICollectionViewDelegateFlowLayout {
         } else {
             selectedColorIndex = indexPath
         }
+        updateCreateButtonState()
     }
     
     func collectionView(

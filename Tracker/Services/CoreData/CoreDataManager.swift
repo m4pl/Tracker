@@ -41,7 +41,9 @@ final class CoreDataManager {
     }
     
     private static func getStoreURL(for fileName: String) -> URL {
-        let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        guard let storeURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            fatalError("Error getting store URL")
+        }
         return storeURL.appendingPathComponent(fileName)
     }
     

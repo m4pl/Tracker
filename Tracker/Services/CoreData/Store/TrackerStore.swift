@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import UIKit
 
 protocol TrackerStoreDelegate: AnyObject {
     func trackerStoreDidChange(_ store: TrackerStore)
@@ -60,7 +59,7 @@ final class TrackerStore: NSObject {
             return Tracker(
                 id: id,
                 name: name,
-                color: UIColor(hex: colorHex),
+                color: colorHex,
                 emoji: emoji,
                 schedule: scheduleData.compactMap { WeekDay(rawValue: $0) }
             )
@@ -72,7 +71,7 @@ final class TrackerStore: NSObject {
         entity.id = tracker.id
         entity.name = tracker.name
         entity.emoji = tracker.emoji
-        entity.colorHex = tracker.color.toHex()
+        entity.colorHex = tracker.color
         entity.schedule = tracker.schedule.map { $0.rawValue } as NSArray
         
         try context.save()

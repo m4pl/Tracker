@@ -12,9 +12,6 @@
 		04D28E322DF1E38D00959235 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E312DF1E38C00959235 /* ScheduleViewController.swift */; };
 		04D28E342DF2358400959235 /* ScheduleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E332DF2358300959235 /* ScheduleCell.swift */; };
 		04D28E362DF49F0000959235 /* AppTextStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E352DF49EFF00959235 /* AppTextStyle.swift */; };
-		04D28E3E2DF4A14C00959235 /* SF-Pro-Text-Medium.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 04D28E3C2DF4A14C00959235 /* SF-Pro-Text-Medium.OTF */; };
-		04D28E3F2DF4A14C00959235 /* SF-Pro-Text-Regular.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 04D28E3D2DF4A14C00959235 /* SF-Pro-Text-Regular.OTF */; };
-		04D28E402DF4A14C00959235 /* SF-Pro-Text-Bold.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 04D28E3B2DF4A14C00959235 /* SF-Pro-Text-Bold.OTF */; };
 		04D28E422DF5548C00959235 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E412DF5548A00959235 /* EmojiCell.swift */; };
 		04D28E452DF5559E00959235 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E442DF5559900959235 /* ColorCell.swift */; };
 		04D28E4A2DF5908600959235 /* TrackerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E482DF5908600959235 /* TrackerModel.xcdatamodeld */; };
@@ -24,6 +21,8 @@
 		04D28E542DF59BB900959235 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E532DF59BB900959235 /* TrackerRecordStore.swift */; };
 		04D28E562DF59C2300959235 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E552DF59C2000959235 /* UIColor+Hex.swift */; };
 		04D28E592DF5A08400959235 /* StoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E582DF5A08300959235 /* StoreError.swift */; };
+		04D28E642DF709EB00959235 /* EmojiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E632DF709EA00959235 /* EmojiData.swift */; };
+		04D28E662DF70A1000959235 /* ColorData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E652DF70A0F00959235 /* ColorData.swift */; };
 		B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406D2DF068B800341FEA /* AppDelegate.swift */; };
 		B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406F2DF068B800341FEA /* SceneDelegate.swift */; };
 		B53B407A2DF068B900341FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B53B40792DF068B900341FEA /* Assets.xcassets */; };
@@ -68,9 +67,6 @@
 		04D28E312DF1E38C00959235 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		04D28E332DF2358300959235 /* ScheduleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCell.swift; sourceTree = "<group>"; };
 		04D28E352DF49EFF00959235 /* AppTextStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTextStyle.swift; sourceTree = "<group>"; };
-		04D28E3B2DF4A14C00959235 /* SF-Pro-Text-Bold.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.OTF"; sourceTree = "<group>"; };
-		04D28E3C2DF4A14C00959235 /* SF-Pro-Text-Medium.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Medium.OTF"; sourceTree = "<group>"; };
-		04D28E3D2DF4A14C00959235 /* SF-Pro-Text-Regular.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.OTF"; sourceTree = "<group>"; };
 		04D28E412DF5548A00959235 /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
 		04D28E442DF5559900959235 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		04D28E492DF5908600959235 /* TrackerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackerModel.xcdatamodel; sourceTree = "<group>"; };
@@ -80,6 +76,8 @@
 		04D28E532DF59BB900959235 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
 		04D28E552DF59C2000959235 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		04D28E582DF5A08300959235 /* StoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreError.swift; sourceTree = "<group>"; };
+		04D28E632DF709EA00959235 /* EmojiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiData.swift; sourceTree = "<group>"; };
+		04D28E652DF70A0F00959235 /* ColorData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorData.swift; sourceTree = "<group>"; };
 		B53B406A2DF068B800341FEA /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B53B406D2DF068B800341FEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B53B406F2DF068B800341FEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -182,9 +180,6 @@
 			isa = PBXGroup;
 			children = (
 				04D28E352DF49EFF00959235 /* AppTextStyle.swift */,
-				04D28E3B2DF4A14C00959235 /* SF-Pro-Text-Bold.OTF */,
-				04D28E3C2DF4A14C00959235 /* SF-Pro-Text-Medium.OTF */,
-				04D28E3D2DF4A14C00959235 /* SF-Pro-Text-Regular.OTF */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -300,6 +295,8 @@
 		B53B40AD2DF0954800341FEA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				04D28E652DF70A0F00959235 /* ColorData.swift */,
+				04D28E632DF709EA00959235 /* EmojiData.swift */,
 				B53B40B42DF0967B00341FEA /* Tracker.swift */,
 				B53B40B62DF0968700341FEA /* WeekDay.swift */,
 				B53B40B82DF0969200341FEA /* TrackerCategory.swift */,
@@ -506,9 +503,6 @@
 			files = (
 				B53B407D2DF068B900341FEA /* LaunchScreen.storyboard in Resources */,
 				B53B407A2DF068B900341FEA /* Assets.xcassets in Resources */,
-				04D28E3E2DF4A14C00959235 /* SF-Pro-Text-Medium.OTF in Resources */,
-				04D28E3F2DF4A14C00959235 /* SF-Pro-Text-Regular.OTF in Resources */,
-				04D28E402DF4A14C00959235 /* SF-Pro-Text-Bold.OTF in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,6 +534,7 @@
 				04D28E4A2DF5908600959235 /* TrackerModel.xcdatamodeld in Sources */,
 				B53B40A32DF06A9400341FEA /* MainTabBarViewController.swift in Sources */,
 				04D28E542DF59BB900959235 /* TrackerRecordStore.swift in Sources */,
+				04D28E642DF709EB00959235 /* EmojiData.swift in Sources */,
 				04D28E4D2DF596FA00959235 /* CoreDataManager.swift in Sources */,
 				B53B40B72DF0968700341FEA /* WeekDay.swift in Sources */,
 				B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */,
@@ -549,6 +544,7 @@
 				B53B40BB2DF0969E00341FEA /* TrackerRecord.swift in Sources */,
 				04D28E452DF5559E00959235 /* ColorCell.swift in Sources */,
 				B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */,
+				04D28E662DF70A1000959235 /* ColorData.swift in Sources */,
 				04D28E502DF59BAB00959235 /* TrackerStore.swift in Sources */,
 				04D28E362DF49F0000959235 /* AppTextStyle.swift in Sources */,
 				04D28E522DF59BB200959235 /* TrackerCategoryStore.swift in Sources */,

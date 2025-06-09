@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import UIKit
 
 protocol TrackerCategoryStoreDelegate: AnyObject {
     func trackerCategoryStoreDidChange(_ store: TrackerCategoryStore)
@@ -62,7 +61,7 @@ final class TrackerCategoryStore: NSObject {
                     return Tracker(
                         id: id,
                         name: name,
-                        color: UIColor(hex: colorHex),
+                        color: colorHex,
                         emoji: emoji,
                         schedule: schedule.compactMap { WeekDay(rawValue: $0) }
                     )
@@ -96,7 +95,7 @@ final class TrackerCategoryStore: NSObject {
             trackerEntity.id = tracker.id
             trackerEntity.name = tracker.name
             trackerEntity.emoji = tracker.emoji
-            trackerEntity.colorHex = tracker.color.toHex()
+            trackerEntity.colorHex = tracker.color
             trackerEntity.schedule = tracker.schedule.map { $0.rawValue } as NSArray
             trackerEntity.category = categoryEntity
             return trackerEntity

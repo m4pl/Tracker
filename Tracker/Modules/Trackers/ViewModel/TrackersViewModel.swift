@@ -68,7 +68,11 @@ final class TrackersViewModel {
                 trackerId: trackerId,
                 date: selectedDay
             )
-            try? recordStore.add(newRecord)
+            do {
+                try recordStore.add(newRecord)
+            } catch {
+                print("Error adding record: \(error)")
+            }
         }
     }
     
@@ -102,18 +106,28 @@ final class TrackersViewModel {
     private func loadRecords() {
         self.completedTrackers = recordStore.getRecords()
     }
-    
+
     private func filterVisibleCategories() {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: selectedDate)
         let adjustedWeekday = (weekday + 5) % 7 + 1
         let day = WeekDay(rawValue: adjustedWeekday) ?? .monday
-        
+
         let filtered = allCategories.map { category in
-            let filteredTrackers = category.trackers.filter { $0.schedule.contains(day) }
+            let filteredTrackers = category.trackers.filter { tracker in
+                if tracker.schedule.isEmpty {
+                    if let completion = completedTrackers.first(where: { $0.trackerId == tracker.id }) {
+                        return calendar.isDate(completion.date, inSameDayAs: selectedDate)
+                    } else {
+                        return true
+                    }
+                } else {
+                    return tracker.schedule.contains(day)
+                }
+            }
             return TrackerCategory(title: category.title, trackers: filteredTrackers)
         }.filter { !$0.trackers.isEmpty }
-        
+
         visibleCategories.send(filtered)
     }
 }
