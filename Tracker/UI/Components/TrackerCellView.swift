@@ -90,15 +90,16 @@ final class TrackerCellView: UICollectionViewCell {
     // MARK: - Public
     
     func configure(with tracker: Tracker, isCompletedToday: Bool, completedDays: Int) {
+        let trackerColor = UIColor(hex: tracker.color)
         emojiLabel.text = tracker.emoji
         nameLabel.text = tracker.name
         daysLabel.text = "\(completedDays) \(completedDays.dayWord)"
-        backgroundCardView.backgroundColor = tracker.color
+        backgroundCardView.backgroundColor = trackerColor
         isCompleted = isCompletedToday
         
         let imageName = isCompleted ? "selected_tracker_logo" : "select_tracker_logo"
         completeButton.setImage(UIImage(named: imageName), for: .normal)
-        completeButton.backgroundColor = isCompleted ? tracker.color.withAlphaComponent(0.5) : tracker.color
+        completeButton.backgroundColor = isCompleted ? trackerColor.withAlphaComponent(0.5) : trackerColor
     }
     
     // MARK: - Private

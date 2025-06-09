@@ -8,11 +8,25 @@
 import UIKit
 
 final class MainTabBarViewController: UITabBarController {
+
+    private let trackersViewModel: TrackersViewModel
+
+    init(trackersViewModel: TrackersViewModel) {
+        self.trackersViewModel = trackersViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let trackersVC = UINavigationController(
-            rootViewController: TrackersViewController()
+            rootViewController: TrackersViewController(
+                viewModel: trackersViewModel
+            )
         )
         let statisticsVC = UINavigationController(
             rootViewController: StatisticsViewController()
