@@ -17,18 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let context = CoreDataManager.shared.viewContext
-
-        let trackersViewModel = TrackersViewModel(
-            categoryStore: TrackerCategoryStore(context: context),
-            trackerStore: TrackerStore(context: context),
-            recordStore: TrackerRecordStore(context: context)
-        )
 
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = MainTabBarViewController(
-            trackersViewModel: trackersViewModel
-        )
+        window?.rootViewController = OnboardingManager.shared.initialViewController()
         window?.makeKeyAndVisible()
     }
 
