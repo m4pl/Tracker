@@ -29,6 +29,8 @@
 		04D28E742DF978D600959235 /* CategoriesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E732DF978D500959235 /* CategoriesListViewController.swift */; };
 		04D28E762DF978E700959235 /* CategoriesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E752DF978E700959235 /* CategoriesListViewModel.swift */; };
 		04D28E782DF978FB00959235 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E772DF978FA00959235 /* CategoryCell.swift */; };
+		04D28E7B2DF98D3A00959235 /* NewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E7A2DF98D3200959235 /* NewCategoryViewController.swift */; };
+		04D28E7F2DF997EC00959235 /* NewCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E7E2DF997E800959235 /* NewCategoryViewModel.swift */; };
 		B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406D2DF068B800341FEA /* AppDelegate.swift */; };
 		B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406F2DF068B800341FEA /* SceneDelegate.swift */; };
 		B53B407A2DF068B900341FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B53B40792DF068B900341FEA /* Assets.xcassets */; };
@@ -90,6 +92,8 @@
 		04D28E732DF978D500959235 /* CategoriesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesListViewController.swift; sourceTree = "<group>"; };
 		04D28E752DF978E700959235 /* CategoriesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesListViewModel.swift; sourceTree = "<group>"; };
 		04D28E772DF978FA00959235 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		04D28E7A2DF98D3200959235 /* NewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewController.swift; sourceTree = "<group>"; };
+		04D28E7E2DF997E800959235 /* NewCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewModel.swift; sourceTree = "<group>"; };
 		B53B406A2DF068B800341FEA /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B53B406D2DF068B800341FEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B53B406F2DF068B800341FEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -271,8 +275,26 @@
 		04D28E792DF983D300959235 /* NewCategory */ = {
 			isa = PBXGroup;
 			children = (
+				04D28E7D2DF997D800959235 /* ViewModel */,
+				04D28E7C2DF98D3E00959235 /* View */,
 			);
 			path = NewCategory;
+			sourceTree = "<group>";
+		};
+		04D28E7C2DF98D3E00959235 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				04D28E7A2DF98D3200959235 /* NewCategoryViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		04D28E7D2DF997D800959235 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				04D28E7E2DF997E800959235 /* NewCategoryViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		B53B40612DF068B700341FEA = {
@@ -593,6 +615,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04D28E7B2DF98D3A00959235 /* NewCategoryViewController.swift in Sources */,
 				B53B40B92DF0969200341FEA /* TrackerCategory.swift in Sources */,
 				04D28E6A2DF7F6F800959235 /* OnboardingPageViewController.swift in Sources */,
 				B53B40C62DF0BE9700341FEA /* BottomAlignedLabel.swift in Sources */,
@@ -615,6 +638,7 @@
 				B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */,
 				04D28E662DF70A1000959235 /* ColorData.swift in Sources */,
 				04D28E502DF59BAB00959235 /* TrackerStore.swift in Sources */,
+				04D28E7F2DF997EC00959235 /* NewCategoryViewModel.swift in Sources */,
 				04D28E362DF49F0000959235 /* AppTextStyle.swift in Sources */,
 				04D28E782DF978FB00959235 /* CategoryCell.swift in Sources */,
 				04D28E522DF59BB200959235 /* TrackerCategoryStore.swift in Sources */,

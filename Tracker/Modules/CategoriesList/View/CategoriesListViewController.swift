@@ -84,15 +84,15 @@ class CategoriesListViewController: UIViewController {
                 self?.updateEmptyState(categories)
             }
             .store(in: &cancellables)
-
+        
         viewModel.selectedCategoryPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] category in
                 self?.onSave?(category)
-                self?.dismiss(animated: true, completion: nil)
+                self?.dismiss(animated: true)
             }
             .store(in: &cancellables)
-
+        
         setupUi()
     }
     
@@ -115,7 +115,7 @@ class CategoriesListViewController: UIViewController {
             action: #selector(addTapped),
             for: .touchUpInside
         )
-
+        
         view.addSubview(addButton)
         
         NSLayoutConstraint.activate([
@@ -197,13 +197,25 @@ class CategoriesListViewController: UIViewController {
     }
     
     @objc private func addTapped() {
+        let context = CoreDataManager.shared.viewContext
+        let categoryStore = TrackerCategoryStore(context: context)
+        let viewModel = NewCategoryViewModel(
+            categoryStore: categoryStore
+        )
+        let  newCategoryVC = NewCategoryViewController(
+            viewModel: viewModel
+        )
+        newCategoryVC.title = "Новая категория"
+        let navController = UINavigationController(rootViewController: newCategoryVC)
+        navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
+        present(navController, animated: true)
     }
 }
 
 // MARK: - UITableViewDataSource
 
 extension CategoriesListViewController: UITableViewDataSource {
-
+    
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
@@ -225,14 +237,14 @@ extension CategoriesListViewController: UITableViewDataSource {
         let category = viewModel.allCategories.value[indexPath.row]
         cell.categoryLabel.text = category.title
         cell.divider.isHidden = (indexPath.row == viewModel.allCategories.value.count - 1)
-
+        
         if let selected = selectedСategory, selected.title == category.title {
             tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             cell.setSelected(true, animated: false)
         } else {
             cell.setSelected(false, animated: false)
         }
-
+        
         return cell
     }
 }
@@ -247,7 +259,7 @@ extension CategoriesListViewController: UITableViewDelegate {
     ) {
         viewModel.selectCategory(at: indexPath.row)
     }
-
+    
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
