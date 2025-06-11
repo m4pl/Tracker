@@ -283,7 +283,7 @@ final class TrackerCreationViewController: UIViewController {
     }
 
     private func updateCategoryButtonSubtitle() {
-        categoryButton.setAttributedTitle(makeButtonTitle("Категория", nil), for: .normal)
+        categoryButton.setAttributedTitle(makeButtonTitle("Категория", category?.title), for: .normal)
     }
 
     private func updateScheduleButtonSubtitle() {
@@ -406,7 +406,7 @@ final class TrackerCreationViewController: UIViewController {
         let isReady = !(nameField.text?.isEmpty ?? true)
             && selectedEmojiIndex != nil
             && selectedColorIndex != nil
-//            && category != nil
+            && category != nil
             && (!isHabit || !schedule.isEmpty)
 
         createButton.isEnabled = isReady
@@ -423,7 +423,26 @@ final class TrackerCreationViewController: UIViewController {
         updateCreateButtonState()
     }
     
-    @objc private func categoryTapped() {}
+    @objc private func categoryTapped() {
+        let context = CoreDataManager.shared.viewContext
+        let categoryStore = TrackerCategoryStore(context: context)
+        let viewModel = CategoriesListViewModel(
+            categoryStore: categoryStore
+        )
+        let categoriesListVC = CategoriesListViewController(
+            viewModel: viewModel
+        )
+        categoriesListVC.selectedСategory = self.category
+        categoriesListVC.title = "Категория"
+        categoriesListVC.onSave = { [weak self] selected in
+            self?.category = selected
+            self?.updateCategoryButtonSubtitle()
+            self?.updateCreateButtonState()
+        }
+        let navController = UINavigationController(rootViewController: categoriesListVC)
+        navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
+        present(navController, animated: true)
+    }
     
     @objc private func scheduleTapped() {
         let scheduleVC = ScheduleViewController()
@@ -440,6 +459,10 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     @objc private func createTapped() {
+        guard let category = category else {
+            return
+        }
+
         let tracker = Tracker(
             id: UUID(),
             name: nameField.text ?? "",
@@ -448,8 +471,8 @@ final class TrackerCreationViewController: UIViewController {
             schedule: isHabit ? schedule : []
         )
         let updatedCategory = TrackerCategory(
-            title: category?.title ?? "С категорией",
-            trackers: category?.trackers ?? [] + [tracker]
+            title: category.title,
+            trackers: category.trackers + [tracker]
         )
         
         onTrackerCreated?(tracker, updatedCategory)

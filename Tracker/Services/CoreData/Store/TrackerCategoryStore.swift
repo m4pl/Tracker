@@ -73,20 +73,39 @@ final class TrackerCategoryStore: NSObject {
             }
         }
     }
+    
+    func create(_ name: String) {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", name)
+        
+        do {
+            let existing = try context.fetch(request)
+            guard existing.isEmpty else { return }
+            
+            let newCategory = TrackerCategoryCoreData(context: context)
+            newCategory.title = name
+            newCategory.trackers = NSSet()
+            
+            try context.save()
+        } catch {
+            print("Failed creating category: \(error)")
+        }
+    }
+    
     func add(_ category: TrackerCategory) throws {
         let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "title == %@", category.title)
-
+        
         let existingCategories = try context.fetch(request)
         let categoryEntity: TrackerCategoryCoreData
-
+        
         if let existing = existingCategories.first {
             categoryEntity = existing
         } else {
             categoryEntity = TrackerCategoryCoreData(context: context)
             categoryEntity.title = category.title
         }
-
+        
         let existingTrackers = (categoryEntity.trackers as? Set<TrackerCoreData>) ?? []
         let existingTrackerIDs = Set(existingTrackers.map { $0.id })
         let newTrackers = category.trackers.filter { !existingTrackerIDs.contains($0.id) }
@@ -100,10 +119,10 @@ final class TrackerCategoryStore: NSObject {
             trackerEntity.category = categoryEntity
             return trackerEntity
         }
-
+        
         let updatedTrackers = existingTrackers.union(newTrackerEntities)
         categoryEntity.trackers = NSSet(set: updatedTrackers)
-
+        
         try context.save()
     }
 }
