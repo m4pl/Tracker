@@ -33,6 +33,8 @@
 		04D28E7F2DF997EC00959235 /* NewCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E7E2DF997E800959235 /* NewCategoryViewModel.swift */; };
 		04D28E822E02AA4800959235 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04D28E802E02AA4800959235 /* Localizable.strings */; };
 		04D28E852E02AB0C00959235 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 04D28E832E02AB0C00959235 /* Localizable.stringsdict */; };
+		04D28E8C2E030B9A00959235 /* TrackerPinnedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E8B2E030B9A00959235 /* TrackerPinnedStore.swift */; };
+		04D28E8E2E03102B00959235 /* PinnedTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E8D2E03102B00959235 /* PinnedTracker.swift */; };
 		B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406D2DF068B800341FEA /* AppDelegate.swift */; };
 		B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406F2DF068B800341FEA /* SceneDelegate.swift */; };
 		B53B407A2DF068B900341FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B53B40792DF068B900341FEA /* Assets.xcassets */; };
@@ -97,6 +99,8 @@
 		04D28E7E2DF997E800959235 /* NewCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryViewModel.swift; sourceTree = "<group>"; };
 		04D28E882E02B33D00959235 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		04D28E8A2E02B3BF00959235 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		04D28E8B2E030B9A00959235 /* TrackerPinnedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerPinnedStore.swift; sourceTree = "<group>"; };
+		04D28E8D2E03102B00959235 /* PinnedTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedTracker.swift; sourceTree = "<group>"; };
 		B53B406A2DF068B800341FEA /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B53B406D2DF068B800341FEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B53B406F2DF068B800341FEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +230,7 @@
 			children = (
 				04D28E582DF5A08300959235 /* StoreError.swift */,
 				04D28E532DF59BB900959235 /* TrackerRecordStore.swift */,
+				04D28E8B2E030B9A00959235 /* TrackerPinnedStore.swift */,
 				04D28E512DF59BB100959235 /* TrackerCategoryStore.swift */,
 				04D28E4F2DF59BA700959235 /* TrackerStore.swift */,
 			);
@@ -389,6 +394,7 @@
 				B53B40B62DF0968700341FEA /* WeekDay.swift */,
 				B53B40B82DF0969200341FEA /* TrackerCategory.swift */,
 				B53B40BA2DF0969E00341FEA /* TrackerRecord.swift */,
+				04D28E8D2E03102B00959235 /* PinnedTracker.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -632,6 +638,7 @@
 				B53B40A32DF06A9400341FEA /* MainTabBarViewController.swift in Sources */,
 				04D28E542DF59BB900959235 /* TrackerRecordStore.swift in Sources */,
 				04D28E642DF709EB00959235 /* EmojiData.swift in Sources */,
+				04D28E8E2E03102B00959235 /* PinnedTracker.swift in Sources */,
 				04D28E4D2DF596FA00959235 /* CoreDataManager.swift in Sources */,
 				B53B40B72DF0968700341FEA /* WeekDay.swift in Sources */,
 				B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */,
@@ -640,6 +647,7 @@
 				B53B40BF2DF0A01A00341FEA /* TrackerCellView.swift in Sources */,
 				B53B40BB2DF0969E00341FEA /* TrackerRecord.swift in Sources */,
 				04D28E452DF5559E00959235 /* ColorCell.swift in Sources */,
+				04D28E8C2E030B9A00959235 /* TrackerPinnedStore.swift in Sources */,
 				04D28E742DF978D600959235 /* CategoriesListViewController.swift in Sources */,
 				B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */,
 				04D28E662DF70A1000959235 /* ColorData.swift in Sources */,

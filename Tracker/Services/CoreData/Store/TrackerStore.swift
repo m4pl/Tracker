@@ -77,9 +77,9 @@ final class TrackerStore: NSObject {
         try context.save()
     }
     
-    func delete(by id: UUID) throws {
+    func delete(_ tracker: Tracker) throws {
         let request = TrackerCoreData.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
         if let object = try context.fetch(request).first {
             context.delete(object)
             try context.save()

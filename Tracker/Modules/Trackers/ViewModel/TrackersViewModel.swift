@@ -13,7 +13,8 @@ final class TrackersViewModel {
     // MARK: - Public Outputs
     private(set) var visibleCategories = CurrentValueSubject<[TrackerCategory], Never>([])
     @Published private(set) var completedTrackers: [TrackerRecord] = []
-    @Published var searchText: String = ""
+    @Published private(set) var pinnedTrackers: [PinnedTracker] = []
+    @Published private(set) var searchText: String = ""
     
     var selectedDate: Date = Date() {
         didSet {
@@ -28,29 +29,46 @@ final class TrackersViewModel {
     private let categoryStore: TrackerCategoryStore
     private let trackerStore: TrackerStore
     private let recordStore: TrackerRecordStore
+    private let pinnedStore: TrackerPinnedStore
     
     // MARK: - Init
     init(
         categoryStore: TrackerCategoryStore,
         trackerStore: TrackerStore,
-        recordStore: TrackerRecordStore
+        recordStore: TrackerRecordStore,
+        pinnedStore: TrackerPinnedStore,
     ) {
         self.categoryStore = categoryStore
         self.trackerStore = trackerStore
         self.recordStore = recordStore
+        self.pinnedStore = pinnedStore
         
         categoryStore.delegate = self
         recordStore.delegate = self
+        pinnedStore.delegate = self
         
         reloadAll()
     }
     
     // MARK: - Public Methods
     
+    func search(_ query: String) {
+        searchText = query
+    }
+    
     func addTracker(_ tracker: Tracker, _ category: TrackerCategory) {
         do {
             try trackerStore.add(tracker)
             try categoryStore.add(category)
+        } catch {
+            print("Error adding tracker: \(error)")
+        }
+    }
+    
+    func deleteTracker(_ tracker: Tracker) {
+        do {
+            try trackerStore.delete(tracker)
+            try categoryStore.delete(tracker)
         } catch {
             print("Error adding tracker: \(error)")
         }
@@ -77,6 +95,19 @@ final class TrackersViewModel {
         }
     }
     
+    func toggleTrackerPin(_ tracker: Tracker) {
+        let tracker = PinnedTracker(
+            tracker: tracker,
+            date: selectedDate
+        )
+        
+        do {
+            try pinnedStore.toggle(tracker)
+        } catch {
+            print("Error pinning/unpinning tracker: \(error)")
+        }
+    }
+    
     func isTrackerCompletedToday(_ trackerId: UUID) -> Bool {
         return completedTrackers.contains {
             $0.trackerId == trackerId && Calendar.current.isDate($0.date, inSameDayAs: selectedDate)
@@ -86,41 +117,69 @@ final class TrackersViewModel {
     func completedDaysCount(for trackerId: UUID) -> Int {
         return completedTrackers.filter { $0.trackerId == trackerId }.count
     }
-    
+
     func filterVisibleCategories() {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: selectedDate)
         let adjustedWeekday = (weekday + 5) % 7 + 1
         let day = WeekDay(rawValue: adjustedWeekday) ?? .monday
         
-        let filtered = allCategories.map { category in
+        let filteredCategories = allCategories.map { category -> TrackerCategory in
             let filteredTrackers = category.trackers.filter { tracker in
                 let matchesSearch = searchText.isEmpty || tracker.name.lowercased().contains(searchText.lowercased())
-
+                
                 if tracker.schedule.isEmpty {
                     let hasAnyRecord = completedTrackers.contains { $0.trackerId == tracker.id }
                     let completedToday = completedTrackers.contains {
                         $0.trackerId == tracker.id && calendar.isDate($0.date, inSameDayAs: selectedDate)
                     }
-
                     return matchesSearch && (!hasAnyRecord || completedToday)
                 } else {
                     return matchesSearch && tracker.schedule.contains(day)
                 }
             }
-
             return TrackerCategory(title: category.title, trackers: filteredTrackers)
+        }.filter { !$0.trackers.isEmpty }
+        
+        let filteredTrackersFlat = filteredCategories.flatMap { $0.trackers }
+        let filteredPinned = pinnedTrackers.filter { pinned in
+            filteredTrackersFlat.contains(where: { $0.id == pinned.tracker.id })
         }
-        .filter { !$0.trackers.isEmpty }
 
-        visibleCategories.send(filtered)
+        let categoriesWithoutPinned = filteredCategories.map { category -> TrackerCategory in
+            let trackersWithoutPinned = category.trackers.filter { tracker in
+                !filteredPinned.contains(where: { $0.tracker.id == tracker.id })
+            }
+            return TrackerCategory(title: category.title, trackers: trackersWithoutPinned)
+        }.filter { !$0.trackers.isEmpty }
+        
+        var finalCategories: [TrackerCategory] = []
+        if !filteredPinned.isEmpty {
+            let pinnedTrackersOnly = filteredPinned.map { $0.tracker }
+            let pinnedCategory = TrackerCategory(
+                title: NSLocalizedString("pinned", comment: ""),
+                trackers: pinnedTrackersOnly
+            )
+            finalCategories.append(pinnedCategory)
+        }
+        
+        finalCategories.append(contentsOf: categoriesWithoutPinned)
+        
+        visibleCategories.send(finalCategories)
     }
+
+
     
     // MARK: - Private
     
     private func reloadAll() {
+        loadPinnedTrackers()
         loadCategories()
         loadRecords()
+    }
+    
+    private func loadPinnedTrackers() {
+        pinnedTrackers = pinnedStore.getPinned()
     }
     
     private func loadCategories() {
@@ -146,6 +205,14 @@ extension TrackersViewModel: TrackerCategoryStoreDelegate {
 
 extension TrackersViewModel: TrackerRecordStoreDelegate {
     func trackerRecordStoreDidChange(_ store: TrackerRecordStore) {
+        loadCategories()
         loadRecords()
+    }
+}
+
+extension TrackersViewModel: TrackerPinnedStoreDelegate {
+    func trackerPinnedStoreDidChange(_ store: TrackerPinnedStore) {
+        loadPinnedTrackers()
+        loadCategories()
     }
 }

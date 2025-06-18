@@ -49,6 +49,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     private lazy var flowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 9
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         layout.minimumLineSpacing = 0
         return layout
     }()
@@ -92,14 +93,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
                 self?.updateEmptyState(categories)
             }
             .store(in: &cancellables)
-
+        
         viewModel.$searchText
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.viewModel.filterVisibleCategories()
             }
             .store(in: &cancellables)
-
+        
         setupUi()
     }
     
@@ -118,7 +119,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: "add_tracker_logo"),
+            image: UIImage(resource: .addTrackerLogo),
             style: .plain,
             target: self,
             action: #selector(addTracker)
@@ -199,12 +200,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
                 constant: 8
             ),
             collectionView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
+                equalTo: view.leadingAnchor
             ),
             collectionView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -16
+                equalTo: view.trailingAnchor
             ),
             collectionView.bottomAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor
@@ -218,6 +217,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private func category(at section: Int) -> TrackerCategory {
         return viewModel.visibleCategories.value[section]
+    }
+    
+    private func isPinned(by: Tracker) -> Bool {
+        return viewModel.pinnedTrackers.contains(where: { $0.tracker.id == by.id })
     }
     
     @objc private func dateChanged(_ sender: UIDatePicker) {
@@ -275,10 +278,13 @@ extension TrackersViewController: UICollectionViewDataSource {
         }
         
         let tracker = tracker(at: indexPath)
+        let pinned = isPinned(by: tracker)
+        
         cell.configure(
             with: tracker,
             isCompletedToday: viewModel.isTrackerCompletedToday(tracker.id),
-            completedDays: viewModel.completedDaysCount(for: tracker.id)
+            completedDays: viewModel.completedDaysCount(for: tracker.id),
+            pinned: pinned,
         )
         cell.delegate = self
         return cell
@@ -323,12 +329,27 @@ extension TrackersViewController: TrackerCellDelegate {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let tracker = tracker(at: indexPath)
         viewModel.toggleTrackerCompletion(tracker.id)
-        collectionView.reloadItems(at: [indexPath])
+    }
+    
+    func didTapPin(for cell: TrackerCellView) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let tracker = tracker(at: indexPath)
+        viewModel.toggleTrackerPin(tracker)
+    }
+    
+    func didTapEdit(for cell: TrackerCellView) {
+        
+    }
+    
+    func didTapDelete(for cell: TrackerCellView) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let tracker = tracker(at: indexPath)
+        viewModel.deleteTracker(tracker)
     }
 }
 
 extension TrackersViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        viewModel.searchText = searchController.searchBar.text ?? ""
+        viewModel.search(searchController.searchBar.text ?? "")
     }
 }

@@ -9,6 +9,9 @@ import UIKit
 
 protocol TrackerCellDelegate: AnyObject {
     func didTapComplete(for cell: TrackerCellView)
+    func didTapPin(for cell: TrackerCellView)
+    func didTapEdit(for cell: TrackerCellView)
+    func didTapDelete(for cell: TrackerCellView)
 }
 
 final class TrackerCellView: UICollectionViewCell {
@@ -40,6 +43,14 @@ final class TrackerCellView: UICollectionViewCell {
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private let pinnedImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(resource: .pinnedTrackerLogo)
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private let nameLabel: UILabel = {
@@ -78,6 +89,7 @@ final class TrackerCellView: UICollectionViewCell {
         setupBackgroundCardView()
         setupBackgroundEmojiView()
         setupEmojiLabel()
+        setupPinnedImage()
         setupNameLabel()
         setupCompleteButton()
         setupDaysLabel()
@@ -89,7 +101,12 @@ final class TrackerCellView: UICollectionViewCell {
     
     // MARK: - Public
     
-    func configure(with tracker: Tracker, isCompletedToday: Bool, completedDays: Int) {
+    func configure(
+        with tracker: Tracker,
+        isCompletedToday: Bool,
+        completedDays: Int,
+        pinned: Bool,
+    ) {
         let trackerColor = UIColor(hex: tracker.color)
         let localizedDays = String.localizedStringWithFormat(
             NSLocalizedString("days_count", comment: ""), completedDays
@@ -97,6 +114,7 @@ final class TrackerCellView: UICollectionViewCell {
         emojiLabel.text = tracker.emoji
         nameLabel.text = tracker.name
         daysLabel.text = localizedDays
+        pinnedImage.isHidden = !pinned
         backgroundCardView.backgroundColor = trackerColor
         isCompleted = isCompletedToday
         
@@ -109,6 +127,10 @@ final class TrackerCellView: UICollectionViewCell {
     
     private func setupBackgroundCardView() {
         contentView.addSubview(backgroundCardView)
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        backgroundCardView.addInteraction(interaction)
+        backgroundCardView.isUserInteractionEnabled = true
         
         NSLayoutConstraint.activate([
             backgroundCardView.topAnchor.constraint(
@@ -157,6 +179,27 @@ final class TrackerCellView: UICollectionViewCell {
         ])
     }
     
+    private func setupPinnedImage() {
+        backgroundCardView.addSubview(pinnedImage)
+        
+        NSLayoutConstraint.activate([
+            pinnedImage.topAnchor.constraint(
+                equalTo: backgroundCardView.topAnchor,
+                constant: 12
+            ),
+            pinnedImage.trailingAnchor.constraint(
+                equalTo: backgroundCardView.trailingAnchor,
+                constant: -4
+            ),
+            pinnedImage.widthAnchor.constraint(
+                equalToConstant: 24
+            ),
+            pinnedImage.heightAnchor.constraint(
+                equalToConstant: 24
+            ),
+        ])
+    }
+    
     private func setupNameLabel() {
         backgroundCardView.addSubview(nameLabel)
         
@@ -182,13 +225,13 @@ final class TrackerCellView: UICollectionViewCell {
     
     private func setupCompleteButton() {
         contentView.addSubview(completeButton)
-
+        
         completeButton.addTarget(
             self,
             action:#selector(completeButtonTapped),
             for: .touchUpInside
         )
-
+        
         NSLayoutConstraint.activate([
             completeButton.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
@@ -227,5 +270,46 @@ final class TrackerCellView: UICollectionViewCell {
     
     @objc private func completeButtonTapped() {
         delegate?.didTapComplete(for: self)
+    }
+}
+
+extension TrackerCellView: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let isPinned = !self.pinnedImage.isHidden
+            
+            let pinAction = UIAction(
+                title: isPinned ? NSLocalizedString("unpin", comment: "") : NSLocalizedString("pin", comment: "")
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.delegate?.didTapPin(for: self)
+            }
+            
+            let editAction = UIAction(
+                title: NSLocalizedString("edit", comment: "")
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.delegate?.didTapEdit(for: self)
+            }
+            
+            let deleteAction = UIAction(
+                title: NSLocalizedString("delete", comment: ""),
+                attributes: [.destructive]
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.delegate?.didTapDelete(for: self)
+            }
+            
+            return UIMenu(
+                children: [
+                    pinAction,
+                    editAction,
+                    deleteAction
+                ]
+            )
+        }
     }
 }
