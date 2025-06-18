@@ -13,7 +13,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
     
     private let habitButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString("habit", comment: ""), for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
         button.titleLabel?.font = AppTextStyle.ypMedium16.font
@@ -24,7 +24,7 @@ final class TrackerTypeSelectionViewController: UIViewController {
     
     private let eventButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(NSLocalizedString("irregular_event", comment: ""), for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
         button.titleLabel?.font = AppTextStyle.ypMedium16.font

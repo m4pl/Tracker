@@ -1,0 +1,35 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by mpplokhov on 18.06.2025.
+  
+*/
+
+"wow_tech" = "Вот это технологии!";
+"page1_title" = "Отслеживайте только\nто, что хотите";
+"page2_title" = "Даже если это\nне литры воды и йога";
+
+"new_category_title" = "Новая категория";
+"tracker_creation_title" = "Создание трекера";
+"new_habit_title" = "Новая привычка";
+"new_event_title" = "Новое нерегулярное событие";
+
+"category_placeholder" = "Введите название категории";
+"tracker_placeholder" = "Введите название трекера";
+
+"category" = "Категория";
+"schedule" = "Расписание";
+"habit" = "Привычка";
+"trackers" = "Трекеры";
+"statistics" = "Статистика";
+
+"irregular_event" = "Нерегулярное событие";
+"tracking_prompt" = "Что будем отслеживать?";
+"every_day" = "Каждый день";
+"category_info_text" = "Привычки и события можно\nобъединить по смыслу";
+"add_category" = "Добавить категорию";
+
+"cancel" = "Отменить";
+"create" = "Создать";
+"done" = "Готово";

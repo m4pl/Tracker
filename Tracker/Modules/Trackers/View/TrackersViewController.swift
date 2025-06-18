@@ -29,7 +29,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private let emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = NSLocalizedString("tracking_prompt", comment: "")
         label.textAlignment = .center
         label.textColor = .ypColorBlack
         label.font = AppTextStyle.ypMedium12.font
@@ -117,7 +117,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             customView: datePicker
         )
-        navigationItem.title = "Трекеры"
+        navigationItem.title = NSLocalizedString("trackers", comment: "")
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
     }
@@ -209,7 +209,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     @objc private func addTracker() {
         let typeVC = TrackerTypeSelectionViewController()
-        typeVC.title = "Создание трекера"
+        typeVC.title = NSLocalizedString("tracker_creation_title", comment: "")
         typeVC.onTypeSelected = { [weak self] isHabit in
             self?.presentTrackerCreation(isHabit: isHabit)
         }
@@ -221,7 +221,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     private func presentTrackerCreation(isHabit: Bool) {
         let creationVC = TrackerCreationViewController()
         creationVC.isHabit = isHabit
-        creationVC.title = isHabit ? "Новая привычка" : "Новое нерегулярное событие"
+        creationVC.title = isHabit ? NSLocalizedString("new_habit_title", comment: "") : NSLocalizedString("new_event_title", comment: "")
         creationVC.onTrackerCreated = { [weak self] tracker, category in
             self?.viewModel.addTracker(tracker, category)
         }

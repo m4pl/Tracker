@@ -91,9 +91,12 @@ final class TrackerCellView: UICollectionViewCell {
     
     func configure(with tracker: Tracker, isCompletedToday: Bool, completedDays: Int) {
         let trackerColor = UIColor(hex: tracker.color)
+        let localizedDays = String.localizedStringWithFormat(
+            NSLocalizedString("days_count", comment: ""), completedDays
+        )
         emojiLabel.text = tracker.emoji
         nameLabel.text = tracker.name
-        daysLabel.text = "\(completedDays) \(completedDays.dayWord)"
+        daysLabel.text = localizedDays
         backgroundCardView.backgroundColor = trackerColor
         isCompleted = isCompletedToday
         

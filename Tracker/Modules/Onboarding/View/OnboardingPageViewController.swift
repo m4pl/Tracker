@@ -12,11 +12,11 @@ class OnboardingPageViewController: UIPageViewController, UIPageViewControllerDa
     private let pages: [OnboardingContentViewController] = {
         let page1 = OnboardingContentViewController()
         page1.imageName = "onboarding1"
-        page1.titleText = "Отслеживайте только\nто, что хотите"
+        page1.titleText = NSLocalizedString("page1_title", comment: "")
         
         let page2 = OnboardingContentViewController()
         page2.imageName = "onboarding2"
-        page2.titleText = "Даже если это\nне литры воды и йога"
+        page2.titleText = NSLocalizedString("page2_title", comment: "")
         
         return [page1, page2]
     }()
@@ -33,7 +33,7 @@ class OnboardingPageViewController: UIPageViewController, UIPageViewControllerDa
     
     private lazy var button: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("wow_tech", comment: ""), for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
         button.titleLabel?.font = AppTextStyle.ypMedium16.font

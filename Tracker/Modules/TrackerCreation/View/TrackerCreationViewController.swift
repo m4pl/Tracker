@@ -19,7 +19,7 @@ final class TrackerCreationViewController: UIViewController {
     
     private let nameField: UITextField = {
         let field = UITextField()
-        field.placeholder = "Введите название трекера"
+        field.placeholder = NSLocalizedString("tracker_placeholder", comment: "")
         field.layer.cornerRadius = 16
         field.backgroundColor = .ypColorGray30
         field.leftViewMode = .always
@@ -283,14 +283,20 @@ final class TrackerCreationViewController: UIViewController {
     }
 
     private func updateCategoryButtonSubtitle() {
-        categoryButton.setAttributedTitle(makeButtonTitle("Категория", category?.title), for: .normal)
+        categoryButton.setAttributedTitle(
+            makeButtonTitle(NSLocalizedString("category", comment: ""), category?.title),
+            for: .normal
+        )
     }
 
     private func updateScheduleButtonSubtitle() {
         let subtitle = schedule.count == WeekDay.allCases.count
-            ? "Каждый день"
+            ? NSLocalizedString("every_day", comment: "")
             : schedule.map { $0.shortName }.joined(separator: ", ")
-        scheduleButton.setAttributedTitle(makeButtonTitle("Расписание", subtitle), for: .normal)
+        scheduleButton.setAttributedTitle(
+            makeButtonTitle(NSLocalizedString("schedule", comment: ""), subtitle),
+            for: .normal
+        )
     }
 
     private func makeButtonTitle(
@@ -360,7 +366,7 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
         cancelButton.setTitleColor(.ypColorRed, for: .normal)
         cancelButton.titleLabel?.font = AppTextStyle.ypMedium16.font
         cancelButton.layer.borderWidth = 1
@@ -374,7 +380,7 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString("create", comment: ""), for: .normal)
         createButton.setTitleColor(.ypColorWhite, for: .normal)
         cancelButton.titleLabel?.font = AppTextStyle.ypMedium16.font
         createButton.backgroundColor = .ypColorGray
@@ -433,7 +439,7 @@ final class TrackerCreationViewController: UIViewController {
             viewModel: viewModel
         )
         categoriesListVC.selectedСategory = self.category
-        categoriesListVC.title = "Категория"
+        categoriesListVC.title = NSLocalizedString("category", comment: "")
         categoriesListVC.onSave = { [weak self] selected in
             self?.category = selected
             self?.updateCategoryButtonSubtitle()
@@ -447,7 +453,7 @@ final class TrackerCreationViewController: UIViewController {
     @objc private func scheduleTapped() {
         let scheduleVC = ScheduleViewController()
         scheduleVC.selectedDays = self.schedule
-        scheduleVC.title = "Расписание"
+        scheduleVC.title = NSLocalizedString("schedule", comment: "")
         scheduleVC.onSave = { [weak self] selected in
             self?.schedule = selected
             self?.updateScheduleButtonSubtitle()
