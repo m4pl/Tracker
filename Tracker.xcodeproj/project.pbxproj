@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		045642C42E0367D40051E2D2 /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 045642C32E0367D40051E2D2 /* AppMetricaCore */; };
+		045642C62E036B760051E2D2 /* StatisticCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045642C52E036B760051E2D2 /* StatisticCell.swift */; };
+		045642C92E0373D90051E2D2 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045642C82E0373D50051E2D2 /* StatisticsViewModel.swift */; };
 		04D28E2A2DF19D8100959235 /* TrackerTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E292DF19D7F00959235 /* TrackerTypeSelectionViewController.swift */; };
 		04D28E2E2DF19E6A00959235 /* TrackerCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E2D2DF19E6900959235 /* TrackerCreationViewController.swift */; };
 		04D28E322DF1E38D00959235 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E312DF1E38C00959235 /* ScheduleViewController.swift */; };
@@ -78,6 +80,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		045642C52E036B760051E2D2 /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
+		045642C82E0373D50051E2D2 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		04D28E292DF19D7F00959235 /* TrackerTypeSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTypeSelectionViewController.swift; sourceTree = "<group>"; };
 		04D28E2D2DF19E6900959235 /* TrackerCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCreationViewController.swift; sourceTree = "<group>"; };
 		04D28E312DF1E38C00959235 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
@@ -160,6 +164,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		045642C72E0373D10051E2D2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				045642C82E0373D50051E2D2 /* StatisticsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		04D28E272DF19D6300959235 /* TrackerTypeSelection */ = {
 			isa = PBXGroup;
 			children = (
@@ -456,6 +468,7 @@
 		B53B40AF2DF095C600341FEA /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
+				045642C72E0373D10051E2D2 /* ViewModel */,
 				B53B40B02DF095CC00341FEA /* View */,
 			);
 			path = Statistics;
@@ -506,6 +519,7 @@
 			isa = PBXGroup;
 			children = (
 				04D28E772DF978FA00959235 /* CategoryCell.swift */,
+				045642C52E036B760051E2D2 /* StatisticCell.swift */,
 				04D28E442DF5559900959235 /* ColorCell.swift */,
 				04D28E412DF5548A00959235 /* EmojiCell.swift */,
 				04D28E332DF2358300959235 /* ScheduleCell.swift */,
@@ -691,6 +705,7 @@
 				04D28E4D2DF596FA00959235 /* CoreDataManager.swift in Sources */,
 				B53B40B72DF0968700341FEA /* WeekDay.swift in Sources */,
 				B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */,
+				045642C92E0373D90051E2D2 /* StatisticsViewModel.swift in Sources */,
 				04D28E2A2DF19D8100959235 /* TrackerTypeSelectionViewController.swift in Sources */,
 				04D28E2E2DF19E6A00959235 /* TrackerCreationViewController.swift in Sources */,
 				04D28E932E03442600959235 /* FilterViewController.swift in Sources */,
@@ -714,6 +729,7 @@
 				B53B40A92DF06ACA00341FEA /* StatisticsViewController.swift in Sources */,
 				04D28E762DF978E700959235 /* CategoriesListViewModel.swift in Sources */,
 				04D28E902E0343A400959235 /* FilterType.swift in Sources */,
+				045642C62E036B760051E2D2 /* StatisticCell.swift in Sources */,
 				04D28E342DF2358400959235 /* ScheduleCell.swift in Sources */,
 				04D28E6C2DF7F6FF00959235 /* OnboardingContentViewController.swift in Sources */,
 				B53B40B52DF0967B00341FEA /* Tracker.swift in Sources */,

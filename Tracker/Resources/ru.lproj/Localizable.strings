@@ -35,6 +35,8 @@
 "every_day" = "Каждый день";
 "category_info_text" = "Привычки и события можно\nобъединить по смыслу";
 "add_category" = "Добавить категорию";
+"nothing_analyze" = "Анализировать пока нечего";
+"trackers_complete" = "Трекеров завершено";
 
 "all_trackers" = "Все трекеры";
 "trackers_today" = "Трекеры на сегодня";

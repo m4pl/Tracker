@@ -10,9 +10,11 @@ import UIKit
 final class MainTabBarViewController: UITabBarController {
 
     private let trackersViewModel: TrackersViewModel
+    private let statisticsViewModel: StatisticsViewModel
 
-    init(trackersViewModel: TrackersViewModel) {
+    init(trackersViewModel: TrackersViewModel, statisticsViewModel: StatisticsViewModel) {
         self.trackersViewModel = trackersViewModel
+        self.statisticsViewModel = statisticsViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -29,7 +31,9 @@ final class MainTabBarViewController: UITabBarController {
             )
         )
         let statisticsVC = UINavigationController(
-            rootViewController: StatisticsViewController()
+            rootViewController: StatisticsViewController(
+                viewModel: statisticsViewModel
+            )
         )
 
         trackersVC.tabBarItem = UITabBarItem(
