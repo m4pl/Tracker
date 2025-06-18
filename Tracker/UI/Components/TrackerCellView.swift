@@ -119,7 +119,8 @@ final class TrackerCellView: UICollectionViewCell {
         isCompleted = isCompletedToday
         
         let imageName = isCompleted ? "selected_tracker_logo" : "select_tracker_logo"
-        completeButton.setImage(UIImage(named: imageName), for: .normal)
+        completeButton.setImage(UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        completeButton.tintColor = .ypColorWhite
         completeButton.backgroundColor = isCompleted ? trackerColor.withAlphaComponent(0.5) : trackerColor
     }
     

@@ -43,8 +43,13 @@ final class MainTabBarViewController: UITabBarController {
             tag: 1
         )
 
-        view.backgroundColor = .ypColorWhite
-        tabBar.isTranslucent = false
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .ypColorWhite
+
+        tabBar.tintColor = .systemBlue
+        tabBar.unselectedItemTintColor = .gray
+        tabBar.standardAppearance = appearance
 
         viewControllers = [trackersVC, statisticsVC]
     }

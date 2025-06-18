@@ -10,7 +10,7 @@ import Combine
 
 final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
-    private let datePicker: UIDatePicker = {
+    private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.datePickerMode = .date
         picker.preferredDatePickerStyle = .compact
@@ -19,7 +19,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         return picker
     }()
     
-    private let placeholderImageView: UIImageView = {
+    private lazy var placeholderImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(resource: .advicePlaceholderLogo)
         imageView.contentMode = .scaleAspectFit
@@ -27,7 +27,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         return imageView
     }()
     
-    private let emptyLabel: UILabel = {
+    private lazy var emptyLabel: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("tracking_prompt", comment: "")
         label.textAlignment = .center
@@ -37,7 +37,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         return label
     }()
     
-    private let emptyStack: UIStackView = {
+    private lazy var emptyStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .center
