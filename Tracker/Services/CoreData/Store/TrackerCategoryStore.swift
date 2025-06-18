@@ -129,6 +129,32 @@ final class TrackerCategoryStore: NSObject {
         try context.save()
     }
     
+    func edit(_ category: TrackerCategory) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", category.title)
+
+        guard let categoryEntity = try context.fetch(request).first else {
+            throw StoreError.categoryNotFound
+        }
+
+        guard let existingTrackers = categoryEntity.trackers as? Set<TrackerCoreData> else { return }
+        let trackerMap = Dictionary(uniqueKeysWithValues: existingTrackers.compactMap { tracker in
+            tracker.id.map { ($0, tracker) }
+        })
+
+        for updatedTracker in category.trackers {
+            guard let trackerEntity = trackerMap[updatedTracker.id] else { continue }
+
+            trackerEntity.name = updatedTracker.name
+            trackerEntity.emoji = updatedTracker.emoji
+            trackerEntity.colorHex = updatedTracker.color
+            trackerEntity.schedule = updatedTracker.schedule.map { $0.rawValue } as NSArray
+        }
+
+        try context.save()
+    }
+
+    
     func delete(_ category: TrackerCategory) throws {
         let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "title == %@", category.title)

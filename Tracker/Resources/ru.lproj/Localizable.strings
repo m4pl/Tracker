@@ -14,6 +14,7 @@
 "tracker_creation_title" = "Создание трекера";
 "new_habit_title" = "Новая привычка";
 "new_event_title" = "Новое нерегулярное событие";
+"edit_tracker_title" = "Редактирование привычки";
 
 "category_placeholder" = "Введите название категории";
 "tracker_placeholder" = "Введите название трекера";
@@ -36,6 +37,7 @@
 
 "cancel" = "Отменить";
 "create" = "Создать";
+"save" = "Сохранить";
 "done" = "Готово";
 "edit" = "Редактировать";
 "delete" = "Удалить";

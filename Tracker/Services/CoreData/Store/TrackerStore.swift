@@ -77,6 +77,22 @@ final class TrackerStore: NSObject {
         try context.save()
     }
     
+    func edit(_ tracker: Tracker) throws {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+
+        guard let existing = try context.fetch(request).first else {
+            throw StoreError.trackerNotFound
+        }
+
+        existing.name = tracker.name
+        existing.emoji = tracker.emoji
+        existing.colorHex = tracker.color
+        existing.schedule = tracker.schedule.map { $0.rawValue } as NSArray
+
+        try context.save()
+    }
+    
     func delete(_ tracker: Tracker) throws {
         let request = TrackerCoreData.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)

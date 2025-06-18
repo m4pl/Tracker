@@ -223,6 +223,25 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         return viewModel.pinnedTrackers.contains(where: { $0.tracker.id == by.id })
     }
     
+    private func editTracker(_ tracker: Tracker) {
+        let creationVC = TrackerCreationViewController()
+        creationVC.isHabit = !tracker.schedule.isEmpty
+        creationVC.isEdit = true
+        creationVC.selectedId = tracker.id
+        creationVC.selectedName = tracker.name
+        creationVC.selectedSchedule = tracker.schedule
+        creationVC.selectedCategory = viewModel.getTrackerCategory(tracker)
+        creationVC.selectedEmoji = tracker.emoji
+        creationVC.selectedColor = tracker.color
+        creationVC.title = NSLocalizedString("edit_tracker_title", comment: "")
+        creationVC.onTrackerCreated = { [weak self] tracker, category in
+            self?.viewModel.editTracker(tracker, category)
+        }
+        let navController = UINavigationController(rootViewController: creationVC)
+        navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
+        present(navController, animated: true)
+    }
+    
     @objc private func dateChanged(_ sender: UIDatePicker) {
         viewModel.selectedDate = sender.date
     }
@@ -338,7 +357,9 @@ extension TrackersViewController: TrackerCellDelegate {
     }
     
     func didTapEdit(for cell: TrackerCellView) {
-        
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let tracker = tracker(at: indexPath)
+        editTracker(tracker)
     }
     
     func didTapDelete(for cell: TrackerCellView) {

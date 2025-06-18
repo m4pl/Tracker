@@ -46,6 +46,7 @@ final class TrackersViewModel {
         categoryStore.delegate = self
         recordStore.delegate = self
         pinnedStore.delegate = self
+        trackerStore.delegate = self
         
         reloadAll()
     }
@@ -65,6 +66,15 @@ final class TrackersViewModel {
         }
     }
     
+    func editTracker(_ tracker: Tracker, _ category: TrackerCategory) {
+        do {
+            try trackerStore.edit(tracker)
+            try categoryStore.edit(category)
+        } catch {
+            print("Error editing tracker: \(error)")
+        }
+    }
+    
     func deleteTracker(_ tracker: Tracker) {
         do {
             try trackerStore.delete(tracker)
@@ -72,6 +82,21 @@ final class TrackersViewModel {
         } catch {
             print("Error adding tracker: \(error)")
         }
+    }
+    
+    func getTrackerCategory(_ tracker: Tracker) -> TrackerCategory? {
+        do {
+            let categories = try categoryStore.getCategories()
+            for category in categories {
+                if category.trackers.contains(where: { $0.id == tracker.id }) {
+                    return category
+                }
+            }
+        } catch {
+            print("Error getting category: \(error)")
+        }
+        
+        return nil
     }
     
     func toggleTrackerCompletion(_ trackerId: UUID) {
@@ -117,7 +142,7 @@ final class TrackersViewModel {
     func completedDaysCount(for trackerId: UUID) -> Int {
         return completedTrackers.filter { $0.trackerId == trackerId }.count
     }
-
+    
     func filterVisibleCategories() {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: selectedDate)
@@ -145,7 +170,7 @@ final class TrackersViewModel {
         let filteredPinned = pinnedTrackers.filter { pinned in
             filteredTrackersFlat.contains(where: { $0.id == pinned.tracker.id })
         }
-
+        
         let categoriesWithoutPinned = filteredCategories.map { category -> TrackerCategory in
             let trackersWithoutPinned = category.trackers.filter { tracker in
                 !filteredPinned.contains(where: { $0.tracker.id == tracker.id })
@@ -167,8 +192,6 @@ final class TrackersViewModel {
         
         visibleCategories.send(finalCategories)
     }
-
-
     
     // MARK: - Private
     
@@ -203,10 +226,17 @@ extension TrackersViewModel: TrackerCategoryStoreDelegate {
     }
 }
 
+extension TrackersViewModel: TrackerStoreDelegate {
+    func trackerStoreDidChange(_ store: TrackerStore) {
+        loadPinnedTrackers()
+        loadCategories()
+    }
+}
+
 extension TrackersViewModel: TrackerRecordStoreDelegate {
     func trackerRecordStoreDidChange(_ store: TrackerRecordStore) {
-        loadCategories()
         loadRecords()
+        loadCategories()
     }
 }
 
