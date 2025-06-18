@@ -8,14 +8,14 @@
 import UIKit
 import Combine
 
-class CategoriesListViewController: UIViewController {
+final class CategoriesListViewController: UIViewController {
     
     var selectedСategory: TrackerCategory? = nil
     var onSave: ((TrackerCategory) -> Void)?
     
     private let placeholderImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "advice_placeholder_logo")
+        imageView.image = UIImage(resource: .advicePlaceholderLogo)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView

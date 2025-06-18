@@ -5,7 +5,6 @@
 //  Created by mpplokhov on 11.06.2025.
 //
 
-import Foundation
 import UIKit
 
 final class OnboardingManager {

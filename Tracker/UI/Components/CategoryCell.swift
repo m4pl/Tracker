@@ -20,7 +20,7 @@ final class CategoryCell: UITableViewCell {
     
     let checkbox: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "selected_category_logo")
+        imageView.image = UIImage(resource: .selectedCategoryLogo)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView

@@ -89,7 +89,7 @@ class OnboardingPageViewController: UIPageViewController, UIPageViewControllerDa
     }
     
     @objc private func buttonClicked() {
-        self.goToMainApp()
+        goToMainApp()
     }
 
     private func goToMainApp() {

@@ -21,7 +21,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private let placeholderImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "advice_placeholder_logo")
+        imageView.image = UIImage(resource: .advicePlaceholderLogo)
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
