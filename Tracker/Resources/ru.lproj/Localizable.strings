@@ -15,6 +15,7 @@
 "new_habit_title" = "Новая привычка";
 "new_event_title" = "Новое нерегулярное событие";
 "edit_tracker_title" = "Редактирование привычки";
+"filters_title" = "Фильтры";
 
 "category_placeholder" = "Введите название категории";
 "tracker_placeholder" = "Введите название трекера";
@@ -34,6 +35,11 @@
 "every_day" = "Каждый день";
 "category_info_text" = "Привычки и события можно\nобъединить по смыслу";
 "add_category" = "Добавить категорию";
+
+"all_trackers" = "Все трекеры";
+"trackers_today" = "Трекеры на сегодня";
+"completed" = "Завершённые";
+"incomplete" = "Незавершённые";
 
 "cancel" = "Отменить";
 "create" = "Создать";

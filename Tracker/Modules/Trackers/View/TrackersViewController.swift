@@ -70,6 +70,18 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         searchController.searchResultsUpdater = self
         return searchController
     }()
+
+    private lazy var filterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(NSLocalizedString("filters_title", comment: ""), for: .normal)
+        button.setTitleColor(.ypColorConstantWhite, for: .normal)
+        button.backgroundColor = .ypColorBlue
+        button.layer.cornerRadius = 16
+        button.titleLabel?.font = AppTextStyle.ypRegular17.font
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     private let viewModel: TrackersViewModel
     private var cancellables = Set<AnyCancellable>()
@@ -115,6 +127,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         setupNavigationBar()
         setupCollectionView()
         setupEmptyPlaceholder()
+        setupFilterButton()
     }
     
     private func setupNavigationBar() {
@@ -174,6 +187,29 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         ])
     }
     
+    private func setupFilterButton() {
+        filterButton.addTarget(
+            self,
+            action: #selector(didTapFilter),
+            for: .touchUpInside
+        )
+        
+        view.addSubview(filterButton)
+
+        NSLayoutConstraint.activate([
+            filterButton.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -16
+            ),
+            filterButton.centerXAnchor.constraint(
+                equalTo: view.centerXAnchor
+            ),
+            filterButton.heightAnchor.constraint(
+                equalToConstant: 50
+            ),
+        ])
+    }
+    
     private func setupCollectionView() {
         let availableWidth = view.bounds.width - 32 - flowLayout.minimumInteritemSpacing
         let cellWidth = floor(availableWidth / 2)
@@ -194,6 +230,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         
         view.addSubview(collectionView)
         
+        collectionView.contentInset.bottom = 82
+
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -256,7 +294,19 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
         present(navController, animated: true)
     }
-    
+
+    @objc private func didTapFilter() {
+        let filterVC = FilterViewController()
+        filterVC.title = NSLocalizedString("filters_title", comment: "")
+        filterVC.selectedFilter = viewModel.currentFilter
+        filterVC.onFilterSelected = { [weak self] filter in
+            self?.viewModel.currentFilter = filter
+        }
+        let navController = UINavigationController(rootViewController: filterVC)
+        navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
+        present(navController, animated: true)
+    }
+
     private func presentTrackerCreation(isHabit: Bool) {
         let creationVC = TrackerCreationViewController()
         creationVC.isHabit = isHabit

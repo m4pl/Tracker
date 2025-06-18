@@ -21,7 +21,17 @@ final class TrackersViewModel {
             filterVisibleCategories()
         }
     }
-    
+
+    @Published var currentFilter: FilterType = .all {
+        didSet {
+            if currentFilter == .today {
+                selectedDate = Date()
+            } else {
+                filterVisibleCategories()
+            }
+        }
+    }
+
     // MARK: - Data Storage
     private var allCategories: [TrackerCategory] = []
     
@@ -142,57 +152,69 @@ final class TrackersViewModel {
     func completedDaysCount(for trackerId: UUID) -> Int {
         return completedTrackers.filter { $0.trackerId == trackerId }.count
     }
-    
+
     func filterVisibleCategories() {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: selectedDate)
         let adjustedWeekday = (weekday + 5) % 7 + 1
-        let day = WeekDay(rawValue: adjustedWeekday) ?? .monday
-        
+        let currentDay = WeekDay(rawValue: adjustedWeekday) ?? .monday
+
+        let completedTodayIds: Set<UUID> = Set(
+            completedTrackers
+                .filter { calendar.isDate($0.date, inSameDayAs: selectedDate) }
+                .map { $0.trackerId }
+        )
+
         let filteredCategories = allCategories.map { category -> TrackerCategory in
             let filteredTrackers = category.trackers.filter { tracker in
                 let matchesSearch = searchText.isEmpty || tracker.name.lowercased().contains(searchText.lowercased())
-                
-                if tracker.schedule.isEmpty {
-                    let hasAnyRecord = completedTrackers.contains { $0.trackerId == tracker.id }
-                    let completedToday = completedTrackers.contains {
-                        $0.trackerId == tracker.id && calendar.isDate($0.date, inSameDayAs: selectedDate)
-                    }
-                    return matchesSearch && (!hasAnyRecord || completedToday)
-                } else {
-                    return matchesSearch && tracker.schedule.contains(day)
+                let isScheduledToday = tracker.schedule.isEmpty || tracker.schedule.contains(currentDay)
+                let isCompleted = completedTodayIds.contains(tracker.id)
+
+                switch currentFilter {
+                case .all, .today:
+                    return matchesSearch && isScheduledToday
+
+                case .completed:
+                    return matchesSearch && isScheduledToday && isCompleted
+
+                case .notCompleted:
+                    return matchesSearch && isScheduledToday && !isCompleted
                 }
             }
+
             return TrackerCategory(title: category.title, trackers: filteredTrackers)
-        }.filter { !$0.trackers.isEmpty }
-        
+        }
+        .filter { !$0.trackers.isEmpty }
+
         let filteredTrackersFlat = filteredCategories.flatMap { $0.trackers }
         let filteredPinned = pinnedTrackers.filter { pinned in
             filteredTrackersFlat.contains(where: { $0.id == pinned.tracker.id })
         }
-        
+
         let categoriesWithoutPinned = filteredCategories.map { category -> TrackerCategory in
             let trackersWithoutPinned = category.trackers.filter { tracker in
                 !filteredPinned.contains(where: { $0.tracker.id == tracker.id })
             }
             return TrackerCategory(title: category.title, trackers: trackersWithoutPinned)
-        }.filter { !$0.trackers.isEmpty }
-        
+        }
+        .filter { !$0.trackers.isEmpty }
+
         var finalCategories: [TrackerCategory] = []
+
         if !filteredPinned.isEmpty {
-            let pinnedTrackersOnly = filteredPinned.map { $0.tracker }
             let pinnedCategory = TrackerCategory(
                 title: NSLocalizedString("pinned", comment: ""),
-                trackers: pinnedTrackersOnly
+                trackers: filteredPinned.map { $0.tracker }
             )
             finalCategories.append(pinnedCategory)
         }
-        
+
         finalCategories.append(contentsOf: categoriesWithoutPinned)
-        
+
         visibleCategories.send(finalCategories)
     }
-    
+
     // MARK: - Private
     
     private func reloadAll() {
