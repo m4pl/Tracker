@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		045642C42E0367D40051E2D2 /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 045642C32E0367D40051E2D2 /* AppMetricaCore */; };
 		04D28E2A2DF19D8100959235 /* TrackerTypeSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E292DF19D7F00959235 /* TrackerTypeSelectionViewController.swift */; };
 		04D28E2E2DF19E6A00959235 /* TrackerCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E2D2DF19E6900959235 /* TrackerCreationViewController.swift */; };
 		04D28E322DF1E38D00959235 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E312DF1E38C00959235 /* ScheduleViewController.swift */; };
@@ -38,6 +39,7 @@
 		04D28E902E0343A400959235 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E8F2E0343A400959235 /* FilterType.swift */; };
 		04D28E932E03442600959235 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E922E03442500959235 /* FilterViewController.swift */; };
 		04D28E972E03533000959235 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 04D28E962E03533000959235 /* SnapshotTesting */; };
+		04D28E9A2E035DBB00959235 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28E992E035DBA00959235 /* AnalyticsService.swift */; };
 		B53B406E2DF068B800341FEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406D2DF068B800341FEA /* AppDelegate.swift */; };
 		B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B406F2DF068B800341FEA /* SceneDelegate.swift */; };
 		B53B407A2DF068B900341FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B53B40792DF068B900341FEA /* Assets.xcassets */; };
@@ -106,6 +108,7 @@
 		04D28E8D2E03102B00959235 /* PinnedTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedTracker.swift; sourceTree = "<group>"; };
 		04D28E8F2E0343A400959235 /* FilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		04D28E922E03442500959235 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		04D28E992E035DBA00959235 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		B53B406A2DF068B800341FEA /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B53B406D2DF068B800341FEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B53B406F2DF068B800341FEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				045642C42E0367D40051E2D2 /* AppMetricaCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,6 +219,7 @@
 		04D28E4B2DF596EC00959235 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				04D28E982E035DB500959235 /* Analytics */,
 				04D28E6D2DF964F000959235 /* OnboardingManager.swift */,
 				04D28E4E2DF5972E00959235 /* CoreData */,
 			);
@@ -326,6 +331,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		04D28E982E035DB500959235 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				04D28E992E035DBA00959235 /* AnalyticsService.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 		B53B40612DF068B700341FEA = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +346,7 @@
 				B53B40862DF068B900341FEA /* TrackerTests */,
 				B53B40902DF068B900341FEA /* TrackerUITests */,
 				B53B406B2DF068B800341FEA /* Products */,
+				CCC3F54C7A6658153731AEB2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -518,6 +532,13 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		CCC3F54C7A6658153731AEB2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -609,6 +630,7 @@
 			mainGroup = B53B40612DF068B700341FEA;
 			packageReferences = (
 				04D28E952E03533000959235 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				045642C22E0367D40051E2D2 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
 			);
 			productRefGroup = B53B406B2DF068B800341FEA /* Products */;
 			projectDirPath = "";
@@ -680,6 +702,7 @@
 				B53B40702DF068B800341FEA /* SceneDelegate.swift in Sources */,
 				04D28E662DF70A1000959235 /* ColorData.swift in Sources */,
 				04D28E502DF59BAB00959235 /* TrackerStore.swift in Sources */,
+				04D28E9A2E035DBB00959235 /* AnalyticsService.swift in Sources */,
 				04D28E7F2DF997EC00959235 /* NewCategoryViewModel.swift in Sources */,
 				04D28E362DF49F0000959235 /* AppTextStyle.swift in Sources */,
 				04D28E782DF978FB00959235 /* CategoryCell.swift in Sources */,
@@ -1051,6 +1074,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		045642C22E0367D40051E2D2 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appmetrica/appmetrica-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.11.1;
+			};
+		};
 		04D28E952E03533000959235 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
@@ -1062,6 +1093,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		045642C32E0367D40051E2D2 /* AppMetricaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 045642C22E0367D40051E2D2 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCore;
+		};
 		04D28E962E03533000959235 /* SnapshotTesting */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 04D28E952E03533000959235 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;

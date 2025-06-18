@@ -116,6 +116,16 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         setupUi()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsService.log(event: .open, screen: "Main")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        AnalyticsService.log(event: .close, screen: "Main")
+    }
+    
     private func updateEmptyState(_ categories: [TrackerCategory]) {
         let isEmpty = categories.isEmpty
         emptyStack.isHidden = !isEmpty
@@ -293,6 +303,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         let navController = UINavigationController(rootViewController: typeVC)
         navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
         present(navController, animated: true)
+        AnalyticsService.log(event: .click, screen: "Main", item: "add_tracker")
     }
 
     @objc private func didTapFilter() {
@@ -305,6 +316,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         let navController = UINavigationController(rootViewController: filterVC)
         navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
         present(navController, animated: true)
+        AnalyticsService.log(event: .click, screen: "Main", item: "filter")
     }
 
     private func presentTrackerCreation(isHabit: Bool) {
@@ -404,18 +416,21 @@ extension TrackersViewController: TrackerCellDelegate {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let tracker = tracker(at: indexPath)
         viewModel.toggleTrackerPin(tracker)
+        AnalyticsService.log(event: .click, screen: "Main", item: "tracker")
     }
     
     func didTapEdit(for cell: TrackerCellView) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let tracker = tracker(at: indexPath)
         editTracker(tracker)
+        AnalyticsService.log(event: .click, screen: "Main", item: "edit")
     }
     
     func didTapDelete(for cell: TrackerCellView) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let tracker = tracker(at: indexPath)
         viewModel.deleteTracker(tracker)
+        AnalyticsService.log(event: .click, screen: "Main", item: "delete")
     }
 }
 
