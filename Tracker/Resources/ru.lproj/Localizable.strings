@@ -18,6 +18,7 @@
 "category_placeholder" = "Введите название категории";
 "tracker_placeholder" = "Введите название трекера";
 
+"search" = "Поиск";
 "category" = "Категория";
 "schedule" = "Расписание";
 "habit" = "Привычка";

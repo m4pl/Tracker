@@ -13,6 +13,7 @@ final class TrackersViewModel {
     // MARK: - Public Outputs
     private(set) var visibleCategories = CurrentValueSubject<[TrackerCategory], Never>([])
     @Published private(set) var completedTrackers: [TrackerRecord] = []
+    @Published var searchText: String = ""
     
     var selectedDate: Date = Date() {
         didSet {
@@ -86,6 +87,35 @@ final class TrackersViewModel {
         return completedTrackers.filter { $0.trackerId == trackerId }.count
     }
     
+    func filterVisibleCategories() {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: selectedDate)
+        let adjustedWeekday = (weekday + 5) % 7 + 1
+        let day = WeekDay(rawValue: adjustedWeekday) ?? .monday
+        
+        let filtered = allCategories.map { category in
+            let filteredTrackers = category.trackers.filter { tracker in
+                let matchesSearch = searchText.isEmpty || tracker.name.lowercased().contains(searchText.lowercased())
+
+                if tracker.schedule.isEmpty {
+                    let hasAnyRecord = completedTrackers.contains { $0.trackerId == tracker.id }
+                    let completedToday = completedTrackers.contains {
+                        $0.trackerId == tracker.id && calendar.isDate($0.date, inSameDayAs: selectedDate)
+                    }
+
+                    return matchesSearch && (!hasAnyRecord || completedToday)
+                } else {
+                    return matchesSearch && tracker.schedule.contains(day)
+                }
+            }
+
+            return TrackerCategory(title: category.title, trackers: filteredTrackers)
+        }
+        .filter { !$0.trackers.isEmpty }
+
+        visibleCategories.send(filtered)
+    }
+    
     // MARK: - Private
     
     private func reloadAll() {
@@ -105,30 +135,6 @@ final class TrackersViewModel {
     
     private func loadRecords() {
         self.completedTrackers = recordStore.getRecords()
-    }
-
-    private func filterVisibleCategories() {
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: selectedDate)
-        let adjustedWeekday = (weekday + 5) % 7 + 1
-        let day = WeekDay(rawValue: adjustedWeekday) ?? .monday
-
-        let filtered = allCategories.map { category in
-            let filteredTrackers = category.trackers.filter { tracker in
-                if tracker.schedule.isEmpty {
-                    if let completion = completedTrackers.first(where: { $0.trackerId == tracker.id }) {
-                        return calendar.isDate(completion.date, inSameDayAs: selectedDate)
-                    } else {
-                        return true
-                    }
-                } else {
-                    return tracker.schedule.contains(day)
-                }
-            }
-            return TrackerCategory(title: category.title, trackers: filteredTrackers)
-        }.filter { !$0.trackers.isEmpty }
-
-        visibleCategories.send(filtered)
     }
 }
 

@@ -62,6 +62,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         return view
     }()
     
+    private lazy var searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = NSLocalizedString("search", comment: "")
+        searchController.searchResultsUpdater = self
+        return searchController
+    }()
+    
     private let viewModel: TrackersViewModel
     private var cancellables = Set<AnyCancellable>()
     
@@ -84,7 +92,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
                 self?.updateEmptyState(categories)
             }
             .store(in: &cancellables)
-        
+
+        viewModel.$searchText
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.viewModel.filterVisibleCategories()
+            }
+            .store(in: &cancellables)
+
         setupUi()
     }
     
@@ -120,6 +135,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         navigationItem.title = NSLocalizedString("trackers", comment: "")
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
     
     private func setupEmptyPlaceholder() {
@@ -307,5 +324,11 @@ extension TrackersViewController: TrackerCellDelegate {
         let tracker = tracker(at: indexPath)
         viewModel.toggleTrackerCompletion(tracker.id)
         collectionView.reloadItems(at: [indexPath])
+    }
+}
+
+extension TrackersViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        viewModel.searchText = searchController.searchBar.text ?? ""
     }
 }
