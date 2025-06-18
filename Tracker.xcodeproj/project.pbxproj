@@ -82,6 +82,8 @@
 /* Begin PBXFileReference section */
 		045642C52E036B760051E2D2 /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
 		045642C82E0373D50051E2D2 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
+		045642CB2E0379230051E2D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		045642CC2E0379A60051E2D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		04D28E292DF19D7F00959235 /* TrackerTypeSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTypeSelectionViewController.swift; sourceTree = "<group>"; };
 		04D28E2D2DF19E6900959235 /* TrackerCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCreationViewController.swift; sourceTree = "<group>"; };
 		04D28E312DF1E38C00959235 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
@@ -358,7 +360,6 @@
 				B53B40862DF068B900341FEA /* TrackerTests */,
 				B53B40902DF068B900341FEA /* TrackerUITests */,
 				B53B406B2DF068B800341FEA /* Products */,
-				CCC3F54C7A6658153731AEB2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -544,13 +545,6 @@
 				04D28E552DF59C2000959235 /* UIColor+Hex.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		CCC3F54C7A6658153731AEB2 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -774,6 +768,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				04D28E8A2E02B3BF00959235 /* ru */,
+				045642CC2E0379A60051E2D2 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -782,6 +777,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				04D28E882E02B33D00959235 /* ru */,
+				045642CB2E0379230051E2D2 /* en */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
