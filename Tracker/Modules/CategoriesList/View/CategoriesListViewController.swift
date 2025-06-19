@@ -26,6 +26,7 @@ final class CategoriesListViewController: UIViewController {
         label.text = NSLocalizedString("category_info_text", comment: "")
         label.textAlignment = .center
         label.textColor = .ypColorBlack
+        label.numberOfLines = 0
         label.font = AppTextStyle.ypMedium12.font
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

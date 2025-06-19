@@ -37,6 +37,7 @@
 "add_category" = "Добавить категорию";
 "nothing_analyze" = "Анализировать пока нечего";
 "trackers_complete" = "Трекеров завершено";
+"nothing_found" = "Ничего не найдено";
 
 "all_trackers" = "Все трекеры";
 "trackers_today" = "Трекеры на сегодня";

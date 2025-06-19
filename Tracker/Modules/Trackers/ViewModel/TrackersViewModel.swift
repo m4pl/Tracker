@@ -32,6 +32,10 @@ final class TrackersViewModel {
         }
     }
 
+    var isFilterApplied: Bool {
+        return !searchText.isEmpty || currentFilter != .all
+    }
+
     // MARK: - Data Storage
     private var allCategories: [TrackerCategory] = []
     

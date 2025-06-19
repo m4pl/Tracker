@@ -29,7 +29,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
     
     private lazy var emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("tracking_prompt", comment: "")
         label.textAlignment = .center
         label.textColor = .ypColorBlack
         label.font = AppTextStyle.ypMedium12.font
@@ -130,6 +129,16 @@ final class TrackersViewController: UIViewController, UICollectionViewDelegate {
         let isEmpty = categories.isEmpty
         emptyStack.isHidden = !isEmpty
         collectionView.isHidden = isEmpty
+        
+        if isEmpty {
+            if viewModel.isFilterApplied {
+                emptyLabel.text = NSLocalizedString("nothing_found", comment: "")
+                placeholderImageView.image = UIImage(resource: .smileFacePlaceholderLogo)
+            } else {
+                emptyLabel.text = NSLocalizedString("tracking_prompt", comment: "")
+                placeholderImageView.image = UIImage(resource: .advicePlaceholderLogo)
+            }
+        }
     }
     
     private func setupUi() {

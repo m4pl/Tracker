@@ -5,7 +5,8 @@
 //  Created by mpplokhov on 18.06.2025.
 //
 
-import AppMetricaCore
+import UIKit
+import YandexMobileMetrica
 
 enum AnalyticsEventType: String {
     case open
@@ -13,7 +14,15 @@ enum AnalyticsEventType: String {
     case click
 }
 
-class AnalyticsService {
+final class AnalyticsService {
+
+    static func activateAppMetrica() {
+        guard let configuration = YMMYandexMetricaConfiguration(apiKey: "acaae5d9-de05-4578-92f5-ff7e7e0d27c9") else {
+            assertionFailure("Failed to create AppMetrica configuration")
+            return
+        }
+        YMMYandexMetrica.activate(with: configuration)
+    }
 
     static func log(event: AnalyticsEventType, screen: String, item: String? = nil) {
         var eventData: [String: Any] = [
@@ -25,7 +34,7 @@ class AnalyticsService {
             eventData["item"] = item
         }
 
-        AppMetrica.reportEvent(name: "custom_event", parameters: eventData, onFailure: { error in
+        YMMYandexMetrica.reportEvent("custom_event", parameters: eventData, onFailure: { error in
             print("AppMetrica error: \(error.localizedDescription)")
         })
 

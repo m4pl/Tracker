@@ -21,14 +21,18 @@ final class TrackerTests: XCTestCase {
 
     func testTrackersViewController_LightTheme() throws {
         let context = CoreDataManager.shared.viewContext
-        let viewModel = TrackersViewModel(
+        let trackersViewModel = TrackersViewModel(
             categoryStore: TrackerCategoryStore(context: context),
             trackerStore: TrackerStore(context: context),
             recordStore: TrackerRecordStore(context: context),
             pinnedStore: TrackerPinnedStore(context: context),
         )
+        let statisticsViewModel = StatisticsViewModel(
+            recordStore: TrackerRecordStore(context: context)
+        )
         let vc = MainTabBarViewController(
-            trackersViewModel: viewModel
+            trackersViewModel: trackersViewModel,
+            statisticsViewModel: statisticsViewModel,
         )
 
         assertSnapshot(of: vc, as: .image(traits: .init(userInterfaceStyle: .light)))
@@ -36,15 +40,20 @@ final class TrackerTests: XCTestCase {
 
     func testTrackersViewController_DarkTheme() {
         let context = CoreDataManager.shared.viewContext
-        let viewModel = TrackersViewModel(
+        let trackersViewModel = TrackersViewModel(
             categoryStore: TrackerCategoryStore(context: context),
             trackerStore: TrackerStore(context: context),
             recordStore: TrackerRecordStore(context: context),
             pinnedStore: TrackerPinnedStore(context: context),
         )
-        let vc = MainTabBarViewController(
-            trackersViewModel: viewModel
+        let statisticsViewModel = StatisticsViewModel(
+            recordStore: TrackerRecordStore(context: context)
         )
+        let vc = MainTabBarViewController(
+            trackersViewModel: trackersViewModel,
+            statisticsViewModel: statisticsViewModel,
+        )
+
 
         assertSnapshot(of: vc, as: .image(traits: .init(userInterfaceStyle: .dark)))
     }

@@ -6,14 +6,16 @@
 //
 
 import UIKit
-import AppMetricaCore
+import YandexMobileMetrica
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let configuration = AppMetricaConfiguration(apiKey: "acaae5d9-de05-4578-92f5-ff7e7e0d27c9")
-        AppMetrica.activate(with: configuration!)
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        AnalyticsService.activateAppMetrica()
 
         return true
     }
