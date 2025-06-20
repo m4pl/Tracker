@@ -12,14 +12,19 @@ final class TrackerCreationViewController: UIViewController {
     // MARK: - Properties
     
     var isHabit: Bool = false
+    var isEdit: Bool = false
     var onTrackerCreated: ((Tracker, TrackerCategory) -> Void)?
     
-    private var schedule: [WeekDay] = []
-    private var category: TrackerCategory? = nil
+    var selectedId: UUID? = nil
+    var selectedName: String? = nil
+    var selectedSchedule: [WeekDay] = []
+    var selectedCategory: TrackerCategory? = nil
+    var selectedColor: String? = nil
+    var selectedEmoji: String? = nil
     
     private let nameField: UITextField = {
         let field = UITextField()
-        field.placeholder = "Введите название трекера"
+        field.placeholder = NSLocalizedString("tracker_placeholder", comment: "")
         field.layer.cornerRadius = 16
         field.backgroundColor = .ypColorGray30
         field.leftViewMode = .always
@@ -76,9 +81,6 @@ final class TrackerCreationViewController: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-    
-    private var selectedEmojiIndex: IndexPath?
-    private var selectedColorIndex: IndexPath?
     
     private lazy var emojiCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -164,6 +166,8 @@ final class TrackerCreationViewController: UIViewController {
         setupColorCollection()
         setupActionButtons()
         
+        updateSelectedData()
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
@@ -230,7 +234,7 @@ final class TrackerCreationViewController: UIViewController {
             scheduleButton,
             action: #selector(scheduleTapped)
         )
-
+        
         updateCategoryButtonSubtitle()
         updateScheduleButtonSubtitle()
         
@@ -281,18 +285,44 @@ final class TrackerCreationViewController: UIViewController {
             )
         ])
     }
-
+    
+    private func updateName() {
+        nameField.text = selectedName
+    }
+    
+    private func updateEmoji() {
+        if let selected = selectedEmoji,
+           let index = EmojiData.all.firstIndex(of: selected) {
+            let indexPath = IndexPath(item: index, section: 0)
+            emojiCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+        }
+    }
+    
+    private func updateColor() {
+        if let selectedHex = selectedColor,
+           let index = ColorData.all.firstIndex(where: { $0.toHex() == selectedHex }) {
+            let indexPath = IndexPath(item: index, section: 0)
+            colorCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+        }
+    }
+    
     private func updateCategoryButtonSubtitle() {
-        categoryButton.setAttributedTitle(makeButtonTitle("Категория", category?.title), for: .normal)
+        categoryButton.setAttributedTitle(
+            makeButtonTitle(NSLocalizedString("category", comment: ""), selectedCategory?.title),
+            for: .normal
+        )
     }
-
+    
     private func updateScheduleButtonSubtitle() {
-        let subtitle = schedule.count == WeekDay.allCases.count
-            ? "Каждый день"
-            : schedule.map { $0.shortName }.joined(separator: ", ")
-        scheduleButton.setAttributedTitle(makeButtonTitle("Расписание", subtitle), for: .normal)
+        let subtitle = selectedSchedule.count == WeekDay.allCases.count
+        ? NSLocalizedString("every_day", comment: "")
+        : selectedSchedule.map { $0.shortName }.joined(separator: ", ")
+        scheduleButton.setAttributedTitle(
+            makeButtonTitle(NSLocalizedString("schedule", comment: ""), subtitle),
+            for: .normal
+        )
     }
-
+    
     private func makeButtonTitle(
         _ title: String,
         _ subtitle: String?
@@ -304,7 +334,7 @@ final class TrackerCreationViewController: UIViewController {
                 .foregroundColor: UIColor.ypColorBlack
             ]
         )
-
+        
         if let subtitle = subtitle, !subtitle.isEmpty {
             let subtitleAttributed = NSAttributedString(
                 string: "\n\(subtitle)",
@@ -315,10 +345,10 @@ final class TrackerCreationViewController: UIViewController {
             )
             titleAttributed.append(subtitleAttributed)
         }
-
+        
         return titleAttributed
     }
-
+    
     private func setupEmojiCollection() {
         emojiCollectionView.heightAnchor.constraint(equalToConstant: 226).isActive = true
         let padded = makePaddedContainer(for: emojiCollectionView, topInset: 16)
@@ -360,7 +390,7 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
         cancelButton.setTitleColor(.ypColorRed, for: .normal)
         cancelButton.titleLabel?.font = AppTextStyle.ypMedium16.font
         cancelButton.layer.borderWidth = 1
@@ -374,7 +404,7 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString(isEdit ? "save" : "create", comment: ""), for: .normal)
         createButton.setTitleColor(.ypColorWhite, for: .normal)
         cancelButton.titleLabel?.font = AppTextStyle.ypMedium16.font
         createButton.backgroundColor = .ypColorGray
@@ -401,14 +431,25 @@ final class TrackerCreationViewController: UIViewController {
         
         return container
     }
-
+    
+    private func updateSelectedData() {
+        if (isEdit) {
+            updateName()
+            updateEmoji()
+            updateColor()
+            updateCategoryButtonSubtitle()
+            updateScheduleButtonSubtitle()
+            updateCreateButtonState()
+        }
+    }
+    
     private func updateCreateButtonState() {
-        let isReady = !(nameField.text?.isEmpty ?? true)
-            && selectedEmojiIndex != nil
-            && selectedColorIndex != nil
-            && category != nil
-            && (!isHabit || !schedule.isEmpty)
-
+        let isReady = !(selectedName?.isEmpty ?? true)
+        && selectedEmoji != nil
+        && selectedColor != nil
+        && selectedCategory != nil
+        && (!isHabit || !selectedSchedule.isEmpty)
+        
         createButton.isEnabled = isReady
         createButton.backgroundColor = isReady ? .ypColorBlack : .ypColorGray
     }
@@ -420,6 +461,7 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     @objc private func nameChanged() {
+        selectedName = nameField.text
         updateCreateButtonState()
     }
     
@@ -432,10 +474,10 @@ final class TrackerCreationViewController: UIViewController {
         let categoriesListVC = CategoriesListViewController(
             viewModel: viewModel
         )
-        categoriesListVC.selectedСategory = self.category
-        categoriesListVC.title = "Категория"
+        categoriesListVC.selectedСategory = self.selectedCategory
+        categoriesListVC.title = NSLocalizedString("category", comment: "")
         categoriesListVC.onSave = { [weak self] selected in
-            self?.category = selected
+            self?.selectedCategory = selected
             self?.updateCategoryButtonSubtitle()
             self?.updateCreateButtonState()
         }
@@ -446,10 +488,10 @@ final class TrackerCreationViewController: UIViewController {
     
     @objc private func scheduleTapped() {
         let scheduleVC = ScheduleViewController()
-        scheduleVC.selectedDays = self.schedule
-        scheduleVC.title = "Расписание"
+        scheduleVC.selectedDays = self.selectedSchedule
+        scheduleVC.title = NSLocalizedString("schedule", comment: "")
         scheduleVC.onSave = { [weak self] selected in
-            self?.schedule = selected
+            self?.selectedSchedule = selected
             self?.updateScheduleButtonSubtitle()
             self?.updateCreateButtonState()
         }
@@ -459,20 +501,20 @@ final class TrackerCreationViewController: UIViewController {
     }
     
     @objc private func createTapped() {
-        guard let category = category else {
+        guard let category = selectedCategory else {
             return
         }
-
+        
         let tracker = Tracker(
-            id: UUID(),
-            name: nameField.text ?? "",
-            color: ColorData.all[selectedColorIndex?.item ?? 0].toHex(),
-            emoji: EmojiData.all[selectedEmojiIndex?.item ?? 0],
-            schedule: isHabit ? schedule : []
+            id: selectedId ?? UUID(),
+            name: selectedName ?? "",
+            color: selectedColor ?? "",
+            emoji: selectedEmoji ?? "",
+            schedule: isHabit ? selectedSchedule : []
         )
         let updatedCategory = TrackerCategory(
             title: category.title,
-            trackers: category.trackers + [tracker]
+            trackers: [tracker]
         )
         
         onTrackerCreated?(tracker, updatedCategory)
@@ -556,9 +598,9 @@ extension TrackerCreationViewController: UICollectionViewDelegateFlowLayout {
         didSelectItemAt indexPath: IndexPath
     ) {
         if collectionView == emojiCollectionView {
-            selectedEmojiIndex = indexPath
+            selectedEmoji = EmojiData.all[indexPath.item]
         } else {
-            selectedColorIndex = indexPath
+            selectedColor = ColorData.all[indexPath.item].toHex()
         }
         updateCreateButtonState()
     }

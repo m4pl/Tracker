@@ -10,9 +10,11 @@ import UIKit
 final class MainTabBarViewController: UITabBarController {
 
     private let trackersViewModel: TrackersViewModel
+    private let statisticsViewModel: StatisticsViewModel
 
-    init(trackersViewModel: TrackersViewModel) {
+    init(trackersViewModel: TrackersViewModel, statisticsViewModel: StatisticsViewModel) {
         self.trackersViewModel = trackersViewModel
+        self.statisticsViewModel = statisticsViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -29,22 +31,29 @@ final class MainTabBarViewController: UITabBarController {
             )
         )
         let statisticsVC = UINavigationController(
-            rootViewController: StatisticsViewController()
+            rootViewController: StatisticsViewController(
+                viewModel: statisticsViewModel
+            )
         )
 
         trackersVC.tabBarItem = UITabBarItem(
-            title: "Трекеры",
+            title: NSLocalizedString("trackers", comment: ""),
             image: UIImage(named: "tab_trackers_logo"),
             tag: 0
         )
         statisticsVC.tabBarItem = UITabBarItem(
-            title: "Статистика",
+            title: NSLocalizedString("statistics", comment: ""),
             image: UIImage(named: "tab_statistics_logo"),
             tag: 1
         )
 
-        view.backgroundColor = .ypColorWhite
-        tabBar.isTranslucent = false
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .ypColorWhite
+
+        tabBar.tintColor = .systemBlue
+        tabBar.unselectedItemTintColor = .gray
+        tabBar.standardAppearance = appearance
 
         viewControllers = [trackersVC, statisticsVC]
     }

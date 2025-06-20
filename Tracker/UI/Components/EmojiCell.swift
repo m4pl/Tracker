@@ -43,5 +43,6 @@ final class EmojiCell: UICollectionViewCell {
     
     func configure(with emoji: String) {
         label.text = emoji
+        contentView.backgroundColor = isSelected ? UIColor.ypColorLightGray : .clear
     }
 }

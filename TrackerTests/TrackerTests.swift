@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import SnapshotTesting
 @testable import Tracker
 
 final class TrackerTests: XCTestCase {
@@ -18,19 +19,42 @@ final class TrackerTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testTrackersViewController_LightTheme() throws {
+        let context = CoreDataManager.shared.viewContext
+        let trackersViewModel = TrackersViewModel(
+            categoryStore: TrackerCategoryStore(context: context),
+            trackerStore: TrackerStore(context: context),
+            recordStore: TrackerRecordStore(context: context),
+            pinnedStore: TrackerPinnedStore(context: context),
+        )
+        let statisticsViewModel = StatisticsViewModel(
+            recordStore: TrackerRecordStore(context: context)
+        )
+        let vc = MainTabBarViewController(
+            trackersViewModel: trackersViewModel,
+            statisticsViewModel: statisticsViewModel,
+        )
+
+        assertSnapshot(of: vc, as: .image(traits: .init(userInterfaceStyle: .light)))
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+    func testTrackersViewController_DarkTheme() {
+        let context = CoreDataManager.shared.viewContext
+        let trackersViewModel = TrackersViewModel(
+            categoryStore: TrackerCategoryStore(context: context),
+            trackerStore: TrackerStore(context: context),
+            recordStore: TrackerRecordStore(context: context),
+            pinnedStore: TrackerPinnedStore(context: context),
+        )
+        let statisticsViewModel = StatisticsViewModel(
+            recordStore: TrackerRecordStore(context: context)
+        )
+        let vc = MainTabBarViewController(
+            trackersViewModel: trackersViewModel,
+            statisticsViewModel: statisticsViewModel,
+        )
 
+
+        assertSnapshot(of: vc, as: .image(traits: .init(userInterfaceStyle: .dark)))
+    }
 }

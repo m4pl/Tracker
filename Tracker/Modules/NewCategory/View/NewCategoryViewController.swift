@@ -11,7 +11,7 @@ final class NewCategoryViewController: UIViewController {
     
     private let nameField: UITextField = {
         let field = UITextField()
-        field.placeholder = "Введите название категории"
+        field.placeholder = NSLocalizedString("category_placeholder", comment: "")
         field.layer.cornerRadius = 16
         field.backgroundColor = .ypColorGray30
         field.leftViewMode = .always
@@ -24,7 +24,7 @@ final class NewCategoryViewController: UIViewController {
     
     private let createButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
         button.titleLabel?.font = AppTextStyle.ypMedium16.font

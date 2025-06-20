@@ -28,10 +28,15 @@ final class OnboardingManager {
             let trackersViewModel = TrackersViewModel(
                 categoryStore: TrackerCategoryStore(context: context),
                 trackerStore: TrackerStore(context: context),
+                recordStore: TrackerRecordStore(context: context),
+                pinnedStore: TrackerPinnedStore(context: context),
+            )
+            let statisticsViewModel = StatisticsViewModel(
                 recordStore: TrackerRecordStore(context: context)
             )
             return MainTabBarViewController(
-                trackersViewModel: trackersViewModel
+                trackersViewModel: trackersViewModel,
+                statisticsViewModel: statisticsViewModel,
             )
         } else {
             return OnboardingPageViewController(

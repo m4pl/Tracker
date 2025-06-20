@@ -23,9 +23,10 @@ final class CategoriesListViewController: UIViewController {
     
     private let emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "Привычки и события можно\nобъединить по смыслу"
+        label.text = NSLocalizedString("category_info_text", comment: "")
         label.textAlignment = .center
         label.textColor = .ypColorBlack
+        label.numberOfLines = 0
         label.font = AppTextStyle.ypMedium12.font
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -53,7 +54,7 @@ final class CategoriesListViewController: UIViewController {
     
     private let addButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("add_category", comment: ""), for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
         button.titleLabel?.font = AppTextStyle.ypMedium16.font
@@ -205,7 +206,7 @@ final class CategoriesListViewController: UIViewController {
         let  newCategoryVC = NewCategoryViewController(
             viewModel: viewModel
         )
-        newCategoryVC.title = "Новая категория"
+        newCategoryVC.title = NSLocalizedString("new_category_title", comment: "")
         let navController = UINavigationController(rootViewController: newCategoryVC)
         navController.navigationBar.titleTextAttributes = AppTextStyle.ypMedium16.attributes
         present(navController, animated: true)

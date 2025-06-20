@@ -26,7 +26,7 @@ final class ScheduleViewController: UIViewController {
     
     private let readyButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         button.backgroundColor = .ypColorBlack
         button.setTitleColor(.ypColorWhite, for: .normal)
         button.titleLabel?.font = AppTextStyle.ypMedium16.font

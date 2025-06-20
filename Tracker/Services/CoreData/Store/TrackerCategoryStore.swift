@@ -46,11 +46,16 @@ final class TrackerCategoryStore: NSObject {
     func getCategories() throws -> [TrackerCategory] {
         guard let categories = fetchedResultsController.fetchedObjects else { return [] }
         
-        return categories.compactMap { category in
-            if let title = category.title,
-               let trackers = category.trackers as? Set<TrackerCoreData> {
-                
-                let models = trackers.compactMap { tracker -> Tracker? in
+        let sortedCategories = categories.sorted { ($0.title ?? "") < ($1.title ?? "") }
+        
+        return sortedCategories.compactMap { category in
+            guard let title = category.title,
+                  let trackersSet = category.trackers as? Set<TrackerCoreData> else {
+                return nil
+            }
+            
+            let sortedTrackers = trackersSet
+                .compactMap { tracker -> Tracker? in
                     guard let id = tracker.id,
                           let name = tracker.name,
                           let emoji = tracker.emoji,
@@ -66,11 +71,9 @@ final class TrackerCategoryStore: NSObject {
                         schedule: schedule.compactMap { WeekDay(rawValue: $0) }
                     )
                 }
-                
-                return TrackerCategory(title: title, trackers: models)
-            } else {
-                return nil
-            }
+                .sorted { $0.name < $1.name }
+            
+            return TrackerCategory(title: title, trackers: sortedTrackers)
         }
     }
     
@@ -124,6 +127,116 @@ final class TrackerCategoryStore: NSObject {
         categoryEntity.trackers = NSSet(set: updatedTrackers)
         
         try context.save()
+    }
+    
+    func edit(_ category: TrackerCategory) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", category.title)
+
+        guard let categoryEntity = try context.fetch(request).first else {
+            throw StoreError.categoryNotFound
+        }
+
+        guard let existingTrackers = categoryEntity.trackers as? Set<TrackerCoreData> else { return }
+        let trackerMap = Dictionary(uniqueKeysWithValues: existingTrackers.compactMap { tracker in
+            tracker.id.map { ($0, tracker) }
+        })
+
+        for updatedTracker in category.trackers {
+            guard let trackerEntity = trackerMap[updatedTracker.id] else { continue }
+
+            trackerEntity.name = updatedTracker.name
+            trackerEntity.emoji = updatedTracker.emoji
+            trackerEntity.colorHex = updatedTracker.color
+            trackerEntity.schedule = updatedTracker.schedule.map { $0.rawValue } as NSArray
+        }
+
+        try context.save()
+    }
+
+    
+    func delete(_ category: TrackerCategory) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", category.title)
+        
+        guard let categoryEntity = try context.fetch(request).first else { return }
+        
+        if let trackers = categoryEntity.trackers as? Set<TrackerCoreData> {
+            for tracker in trackers {
+                context.delete(tracker)
+            }
+            categoryEntity.trackers = nil
+        }
+        
+        if categoryEntity.trackers == nil || (categoryEntity.trackers?.count ?? 0) == 0 {
+            context.delete(categoryEntity)
+        }
+        
+        try context.save()
+    }
+    
+    func delete(_ tracker: Tracker) throws {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        
+        let trackerEntities = try context.fetch(request)
+        
+        for trackerEntity in trackerEntities {
+            if let category = trackerEntity.category {
+                var trackers = (category.trackers as? Set<TrackerCoreData>) ?? []
+                trackers.remove(trackerEntity)
+                category.trackers = NSSet(set: trackers)
+            }
+            context.delete(trackerEntity)
+        }
+        
+        try context.save()
+    }
+    
+    func toggleTrackers(_ category: TrackerCategory) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", category.title)
+        
+        let existingCategories = try context.fetch(request)
+        let categoryEntity: TrackerCategoryCoreData
+        
+        if let existing = existingCategories.first {
+            categoryEntity = existing
+        } else {
+            try add(category)
+            return
+        }
+        
+        var currentTrackers = (categoryEntity.trackers as? Set<TrackerCoreData>) ?? []
+        var modified = false
+        
+        for tracker in category.trackers {
+            if let existingTracker = currentTrackers.first(where: { $0.id == tracker.id }) {
+                context.delete(existingTracker)
+                currentTrackers.remove(existingTracker)
+                modified = true
+            } else {
+                let newTracker = TrackerCoreData(context: context)
+                newTracker.id = tracker.id
+                newTracker.name = tracker.name
+                newTracker.emoji = tracker.emoji
+                newTracker.colorHex = tracker.color
+                newTracker.schedule = tracker.schedule.map { $0.rawValue } as NSArray
+                newTracker.category = categoryEntity
+                currentTrackers.insert(newTracker)
+                modified = true
+            }
+        }
+        
+        if modified {
+            categoryEntity.trackers = NSSet(set: currentTrackers)
+            
+            if currentTrackers.isEmpty {
+                context.delete(categoryEntity)
+            }
+            
+            try context.save()
+        }
     }
 }
 
